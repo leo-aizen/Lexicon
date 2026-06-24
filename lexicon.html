@@ -1,0 +1,992 @@
+<!-- Lexicon — a personal terminology mastery desk -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lexicon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ECEEF1; --paper:#FFFFFF; --paper2:#FAFAF8;
+    --ink:#161A22; --muted:#5B6470; --faint:#8B939E;
+    --line:#E3E6EB; --line2:#EDEFF2;
+    --primary:#15303A; --primary-soft:#1f4654;
+    --accent:#1C7C54; --accent-soft:#E5F1EB;
+    --warn:#B45309; --warn-soft:#F8EBDD;
+    --serif:'Fraunces',Georgia,'Times New Roman',serif;
+    --sans:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --shadow:0 1px 2px rgba(20,25,35,.04),0 8px 24px rgba(20,25,35,.06);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
+  a{color:var(--primary-soft)}
+  ::selection{background:#cfe3d9}
+
+  .app{max-width:1180px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+
+  /* ---- top bar ---- */
+  header.bar{
+    position:sticky;top:0;z-index:30;background:rgba(236,238,241,.86);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+    padding:14px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:baseline;gap:9px;flex:0 0 auto}
+  .brand b{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:-.01em}
+  .brand span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--faint)}
+  .search{flex:1 1 240px;min-width:180px;position:relative}
+  .search input{
+    width:100%;padding:9px 14px 9px 34px;border:1px solid var(--line);
+    border-radius:10px;background:var(--paper);outline:none;transition:border-color .15s;
+  }
+  .search input:focus{border-color:var(--primary-soft)}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);
+    width:15px;height:15px;color:var(--faint)}
+  nav.tabs{display:flex;gap:2px;flex:0 0 auto;flex-wrap:wrap}
+  nav.tabs button{
+    padding:8px 13px;border-radius:9px;font-size:13.5px;font-weight:500;color:var(--muted);
+    transition:.13s;white-space:nowrap;
+  }
+  nav.tabs button:hover{color:var(--ink);background:var(--line2)}
+  nav.tabs button.on{background:var(--primary);color:#fff}
+
+  main{flex:1;padding:24px 22px 80px}
+
+  /* ---- library layout ---- */
+  .lib{display:grid;grid-template-columns:248px 1fr;gap:26px;align-items:start}
+  .index{position:sticky;top:86px}
+  .index h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--faint);margin:0 0 10px 6px}
+  .cat{margin-bottom:4px}
+  .cat>.cathead{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+    padding:7px 8px;border-radius:8px;font-weight:600;font-size:13.5px;color:var(--ink)}
+  .cat>.cathead:hover{background:var(--line2)}
+  .cat .num{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500}
+  .grp{display:block;width:100%;text-align:left;padding:6px 8px 6px 24px;border-radius:8px;
+    font-size:13px;color:var(--muted);position:relative}
+  .grp:hover{background:var(--line2);color:var(--ink)}
+  .grp.on{color:var(--primary);font-weight:600;background:var(--accent-soft)}
+  .grp .ct{float:right;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+  .index .all{width:100%;text-align:left;padding:7px 8px;border-radius:8px;font-weight:600;
+    font-size:13.5px;margin-bottom:8px}
+  .index .all:hover{background:var(--line2)}
+  .index .all.on{background:var(--primary);color:#fff}
+
+  .panel{min-width:0}
+  .panelhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+    margin-bottom:16px;flex-wrap:wrap}
+  .panelhead .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--faint)}
+  .panelhead h2{font-family:var(--serif);font-weight:500;font-size:27px;margin:3px 0 0;
+    letter-spacing:-.015em;line-height:1.1}
+  .panelhead p{margin:7px 0 0;color:var(--muted);font-size:13.5px;max-width:60ch}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:10px;
+    font-size:13.5px;font-weight:600;background:var(--primary);color:#fff;transition:.13s}
+  .btn:hover{background:var(--primary-soft)}
+  .btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--muted)}
+  .btn.sm{padding:6px 11px;font-size:12.5px}
+
+  /* ---- term cards ---- */
+  .terms{display:flex;flex-direction:column;gap:11px}
+  .term{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:17px 19px;transition:border-color .15s,box-shadow .15s;cursor:pointer}
+  .term:hover{border-color:#cfd5dd;box-shadow:var(--shadow)}
+  .term .tline{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .term h3{font-family:var(--serif);font-weight:600;font-size:19px;margin:0;letter-spacing:-.01em}
+  .term .meta{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+  .term .grouptag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--faint);
+    text-transform:uppercase}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .dot.learning{background:var(--warn)}
+  .dot.known{background:var(--accent)}
+  .term .def{margin:8px 0 0;color:#2c333d;font-size:14px;line-height:1.6}
+  .term.collapsed .def{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden}
+  .term .acts{margin-top:12px;display:none;gap:7px;flex-wrap:wrap}
+  .term.open .acts{display:flex}
+  .term.open{cursor:default}
+  .empty{text-align:center;padding:60px 20px;color:var(--faint)}
+  .empty .big{font-family:var(--serif);font-size:21px;color:var(--muted);margin-bottom:6px}
+
+  /* ---- generic card panel ---- */
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow)}
+  .scopebar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+  .scopebar select{padding:8px 11px;border:1px solid var(--line);border-radius:9px;
+    background:var(--paper);outline:none}
+  .scopebar label{font-size:12.5px;color:var(--muted);font-weight:500}
+
+  /* ---- flashcards ---- */
+  .flashwrap{max-width:640px;margin:0 auto}
+  .flash{perspective:1600px;height:330px;margin:8px 0 18px}
+  .flashinner{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d}
+  .flash.flip .flashinner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:var(--paper);
+    border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+    padding:30px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center}
+  .face .lab{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);position:absolute;top:18px;left:0;right:0}
+  .face.front h2{font-family:var(--serif);font-weight:600;font-size:30px;margin:0;letter-spacing:-.02em}
+  .face.front .grouptag{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px}
+  .face.back{transform:rotateY(180deg);overflow-y:auto;align-items:flex-start;text-align:left}
+  .face.back .bk-term{font-family:var(--serif);font-weight:600;font-size:18px;margin:6px 0 10px}
+  .face.back .bk-def{font-size:14.5px;line-height:1.62;color:#2c333d}
+  .flash .hint{position:absolute;bottom:16px;left:0;right:0;font-size:11.5px;color:var(--faint)}
+  .deckctrl{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .deckctrl .mid{display:flex;gap:8px}
+  .progbar{height:5px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 0 14px}
+  .progbar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+  .deckmeta{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:6px}
+
+  /* ---- quiz ---- */
+  .quizwrap{max-width:680px;margin:0 auto}
+  .q-prompt{font-size:13px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em;
+    text-transform:uppercase;margin-bottom:10px}
+  .q-body{font-size:17px;line-height:1.55;margin-bottom:20px}
+  .q-body.term{font-family:var(--serif);font-size:26px;font-weight:600}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{text-align:left;padding:13px 15px;border:1px solid var(--line);border-radius:11px;
+    background:var(--paper);font-size:14px;line-height:1.5;transition:.12s}
+  .opt:hover{border-color:var(--muted)}
+  .opt.correct{border-color:var(--accent);background:var(--accent-soft)}
+  .opt.wrong{border-color:var(--warn);background:var(--warn-soft)}
+  .opt:disabled{cursor:default}
+  .typed{display:flex;gap:9px}
+  .typed input{flex:1;padding:13px 15px;border:1px solid var(--line);border-radius:11px;
+    outline:none;font-size:15px}
+  .typed input:focus{border-color:var(--primary-soft)}
+  .reveal{margin-top:18px;padding:16px 18px;border-radius:12px;border:1px solid var(--line);
+    background:var(--paper2)}
+  .reveal .r-term{font-family:var(--serif);font-weight:600;font-size:18px}
+  .reveal .r-def{font-size:14px;color:#2c333d;margin-top:6px;line-height:1.6}
+  .reveal .grade{display:flex;gap:8px;margin-top:14px}
+  .scoreline{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;
+    color:var(--muted);margin-bottom:16px}
+  .results{text-align:center;padding:14px}
+  .results .score{font-family:var(--serif);font-size:52px;font-weight:600}
+  .results .sub{color:var(--muted);margin-top:4px}
+  .misslist{margin-top:22px;text-align:left}
+  .misslist h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--faint);margin:0 0 10px}
+  .missitem{padding:11px 0;border-top:1px solid var(--line2)}
+  .missitem b{font-family:var(--serif);font-size:15.5px}
+
+  /* ---- compare ---- */
+  .cmp-pick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:20px;
+    background:var(--primary);color:#fff;font-size:13px;font-weight:500}
+  .chip button{color:#cdd8d4;font-size:15px;line-height:1}
+  .cmp-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .cmp-col h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 4px}
+  .cmp-col .grouptag{font-family:var(--mono);font-size:10px;color:var(--faint);text-transform:uppercase;
+    letter-spacing:.06em}
+  .cmp-col .def{margin-top:12px;font-size:14px;line-height:1.62;color:#2c333d}
+  .related{margin-top:20px;padding-top:16px;border-top:1px solid var(--line2)}
+  .related h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--faint);margin:0 0 10px}
+  .related .r{display:inline-flex;margin:0 6px 6px 0;padding:5px 11px;border:1px solid var(--line);
+    border-radius:18px;font-size:12.5px;background:var(--paper)}
+  .related .r:hover{border-color:var(--muted)}
+
+  /* ---- resources ---- */
+  .res{display:flex;flex-direction:column;gap:11px}
+  .resitem{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 18px;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+  .resitem h3{font-family:var(--serif);font-weight:600;font-size:17px;margin:0}
+  .resitem a.tt{color:var(--ink);text-decoration:none}
+  .resitem a.tt:hover{text-decoration:underline}
+  .resitem .src{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:3px;
+    word-break:break-all}
+  .resitem .note{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.55}
+  .resitem .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);flex:0 0 auto}
+
+  /* ---- dashboard strip ---- */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:22px}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .n{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1}
+  .stat .l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);margin-top:6px}
+  .stat .n.acc{color:var(--accent)} .stat .n.wn{color:var(--warn)}
+
+  /* ---- modal ---- */
+  .scrim{position:fixed;inset:0;background:rgba(20,25,35,.4);backdrop-filter:blur(2px);
+    z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:40px 18px;overflow:auto}
+  .modal{background:var(--paper);border-radius:18px;width:100%;max-width:540px;padding:26px;
+    box-shadow:0 30px 80px rgba(0,0,0,.25)}
+  .modal h3{font-family:var(--serif);font-weight:600;font-size:22px;margin:0 0 18px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;
+    font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
+  .field input,.field textarea,.field select{width:100%;padding:10px 12px;border:1px solid var(--line);
+    border-radius:10px;outline:none;background:var(--paper)}
+  .field textarea{min-height:120px;resize:vertical;line-height:1.55}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary-soft)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .modalacts{display:flex;justify-content:space-between;gap:8px;margin-top:8px}
+  .danger{color:var(--warn)}
+
+  .savenote{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:9px 16px;border-radius:10px;font-size:13px;
+    opacity:0;transition:.25s;z-index:60;pointer-events:none}
+  .savenote.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* mobile */
+  .menubtn{display:none}
+  @media(max-width:780px){
+    .lib{grid-template-columns:1fr}
+    .index{position:static;display:none;margin-bottom:18px;background:var(--paper);
+      border:1px solid var(--line);border-radius:14px;padding:14px}
+    .index.show{display:block}
+    .menubtn{display:inline-flex}
+    .panelhead h2{font-size:23px}
+    nav.tabs{order:3;width:100%}
+    .row2{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+    .flashinner{transition:none!important}
+  }
+</style>
+
+<div class="app">
+  <header class="bar">
+    <div class="brand"><b>Lexicon</b><span>mastery&nbsp;desk</span></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="globalSearch" placeholder="Search terms & definitions…" autocomplete="off">
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-view="library" class="on">Library</button>
+      <button data-view="study">Study</button>
+      <button data-view="quiz">Quiz</button>
+      <button data-view="compare">Compare</button>
+      <button data-view="resources">Resources</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+
+<div id="modalRoot"></div>
+<div class="savenote" id="savenote">Saved</div>
+
+<script>
+/* ============================== utilities ============================== */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48);
+const uid=()=>'t'+Math.random().toString(36).slice(2,9);
+const norm=s=>String(s).toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim();
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* ============================== persistence ============================== */
+const Store={
+  mem:{},
+  async get(k){
+    try{ if(window.storage){ const r=await window.storage.get(k); return r&&r.value? JSON.parse(r.value):null; } }
+    catch(e){ /* missing key throws */ }
+    return (k in this.mem)? this.mem[k]:null;
+  },
+  async set(k,v){
+    this.mem[k]=v;
+    try{ if(window.storage) await window.storage.set(k,JSON.stringify(v)); }catch(e){ console.warn('storage',e); }
+  }
+};
+let saveT; function toast(m='Saved'){const n=$('#savenote');n.textContent=m;n.classList.add('show');clearTimeout(saveT);saveT=setTimeout(()=>n.classList.remove('show'),1400);}
+
+/* ============================== seed corpus ============================== */
+/* category | group(order matters within category) | term | definition */
+const GROUP_ORDER=[
+  ['Finance','Regulation & Access'],
+  ['Finance','Fund Structures & Vehicles'],
+  ['Finance','Fund Economics — Fees & Waterfalls'],
+  ['Finance','Capital Markets Foundations'],
+  ['Finance','Private Markets — PE, VC & Secondaries'],
+  ['Finance','Hedge Fund Strategies'],
+  ['Finance','Performance & Return Metrics'],
+  ['Finance','Company & Business-Quality Metrics'],
+  ['Finance','Valuation'],
+  ['Finance','Credit & the Debt Side'],
+  ['Finance','The Capital Stack & Stocks'],
+  ['Finance','Indices, ETFs & Market Shorthand'],
+  ['Economics','Macro, Rates & Liquidity'],
+];
+const SEED=[
+/* ---------- Regulation & Access ---------- */
+{t:'Sophistication requirement',c:'Finance',g:'Regulation & Access',d:`The legal premise beneath the access tiers: certain risky investments are restricted to people presumed able to understand and absorb the risk. "Sophistication" is inferred from wealth thresholds rather than tested directly — wealth is used as a proxy for sophistication, not the same thing. That gap is the premise worth poking at.`},
+{t:'Accredited investor',c:'Finance',g:'Regulation & Access',d:`Someone who legally qualifies to invest in private deals based on income or net worth: $200K income ($300K joint) over two years, or $1M net worth excluding primary residence. Since the 2020 SEC update, holding certain professional certifications (Series 7/65/82 in good standing) also qualifies — recognizing professional knowledge instead of just wealth. This is the lower bar. The SEC has gradually broadened who qualifies, so treat it as an evolving line, not a fixed one.`},
+{t:'Qualified Purchaser (QP)',c:'Finance',g:'Regulation & Access',d:`The higher wealth threshold, defined under the Investment Company Act of 1940, §2(a)(51). An individual needs $5M in investments — note: investments, not net worth, so your house doesn't count. Entities/institutions generally need $25M in investments. A family-owned company can qualify at $5M; an investment manager qualifies if it manages $25M+ for other QPs; a trust qualifies if its key people are QPs or it holds $5M+ in investments. QP sits a full tier above accredited — the door accreditation alone won't open.`},
+{t:'Qualified Institutional Buyer (QIB)',c:'Finance',g:'Regulation & Access',d:`The top of the ladder: a large institution managing $100M+ in securities, with the widest access of all under a separate SEC rule (Rule 144A), which lets QIBs trade certain private securities among themselves more freely.`},
+{t:'Investment Company Act of 1940',c:'Finance',g:'Regulation & Access',d:`The foundational U.S. law governing investment funds. Most of the access definitions — qualified purchaser, the 3(c) exemptions — live inside it.`},
+{t:'Section 3(c)(1) fund',c:'Finance',g:'Regulation & Access',d:`A private fund exempt from SEC registration, capped at 100 beneficial owners (250 for smaller qualifying venture funds under the 2018 rules). Open to both accredited investors and QPs. The smaller, more accessible private fund.`},
+{t:'Section 3(c)(7) fund',c:'Finance',g:'Regulation & Access',d:`A private fund exempt from registration, open only to QPs. Under the '40 Act itself the QP count is effectively unlimited — but a separate law, the Securities Exchange Act of 1934 (§12(g)), forces a fund to register and report once it crosses 2,000 holders (practically, managers stop at 1,999). So the shorthand "up to ~2,000 QPs" is correct, but the cap comes from the '34 Act's reporting trigger, not the '40 Act. Accredited investors are locked out entirely. The trade-off across the two exemptions: 3(c)(1) admits a broader pool but caps the count low (100); 3(c)(7) demands wealthier investors but allows far more of them. Large hedge funds usually choose 3(c)(7) for headroom on investor count.`},
+{t:'Regulation D (Reg D)',c:'Finance',g:'Regulation & Access',d:`The SEC framework most private funds raise under, exempting them from full registration. Two paths matter: Rule 506(b) allows up to 35 non-accredited (sophisticated) investors but bans general solicitation — no public advertising, you must have a pre-existing relationship; Rule 506(c) allows public advertising but requires every investor to be accredited and verified. Which rule a fund relies on tells you how it's allowed to market itself.`},
+{t:'Unregistered securities',c:'Finance',g:'Regulation & Access',d:`Investments that haven't gone through the SEC's full registration and disclosure process. Riskier and less transparent — which is the entire reason access is gated to wealthier investors.`},
+{t:'Private funds',c:'Finance',g:'Regulation & Access',d:`Funds not open to the general public: venture capital, private equity, hedge funds. The vehicles the qualified-purchaser rules govern.`},
+{t:'Beneficial owner',c:'Finance',g:'Regulation & Access',d:`The actual ultimate human(s) who own an investment, looking through any holding companies or shell entities. The 100-owner cap on 3(c)(1) funds counts beneficial owners, so a fund can't dodge the limit by stacking entities.`},
+{t:'Net worth',c:'Finance',g:'Regulation & Access',d:`Everything you own minus everything you owe. One of the thresholds defining an accredited investor.`},
+{t:'Series 7, 65, 82 licenses',c:'Finance',g:'Regulation & Access',d:`Professional financial licenses. Holding one in good standing is an alternative path to accredited status — recognizing professional knowledge instead of just wealth.`},
+{t:'Family office',c:'Finance',g:'Regulation & Access',d:`An entity managing one wealthy family's money. Qualifies as a QP with $5M+ in investments.`},
+{t:'Trust / Trustee / Settlor',c:'Finance',g:'Regulation & Access',d:`A trust is a legal arrangement where one party (the trustee) holds assets for another's benefit; the settlor is the person who created and funded it. A trust qualifies as a QP if its key people are QPs or it holds $5M+ in investments.`},
+{t:'SEC (Securities and Exchange Commission)',c:'Finance',g:'Regulation & Access',d:`The U.S. regulator overseeing securities markets, setting rules for who can invest and how deals are disclosed.`},
+
+/* ---------- Fund Structures & Vehicles ---------- */
+{t:'Hedge fund',c:'Finance',g:'Fund Structures & Vehicles',d:`A private, lightly regulated fund pooling money from sophisticated investors and pursuing a wide range of strategies (often using leverage, short-selling, or derivatives) to generate returns. Typically structured to admit only QPs.`},
+{t:'Fund of funds (FOF)',c:'Finance',g:'Fund Structures & Vehicles',d:`A fund that invests in other funds rather than directly in securities. The pitch: instant diversification across managers and strategies, access to closed or hard-to-reach managers, and outsourced due diligence. The cost: a double layer of fees — the FOF's own fee on top of each underlying manager's 2/20. That's the standard critique; you need genuine manager-selection alpha to justify the extra fee drag.`},
+{t:'SPV (Special Purpose Vehicle)',c:'Finance',g:'Fund Structures & Vehicles',d:`A standalone legal entity created to hold a single investment or pursue one specific deal, separate from the main fund. Used for co-investments, to ring-fence risk, or to let a specific set of investors into one deal without restructuring the whole fund. Think "a fund built for exactly one thing."`},
+{t:'Co-investment',c:'Finance',g:'Fund Structures & Vehicles',d:`A direct investment made alongside a PE or VC fund into a specific company or deal — usually offered to favored LPs, often with reduced or no fees. Lets an LP concentrate capital into a deal they like without paying full freight.`},
+{t:'Master-feeder structure',c:'Finance',g:'Fund Structures & Vehicles',d:`A common hedge fund architecture: multiple "feeder" funds (e.g., one onshore for U.S. taxable investors, one offshore for non-U.S. and tax-exempt investors) pool their capital into a single "master" fund that does the actual trading. Lets one strategy serve different investor types with different tax/regulatory needs through one trading book.`},
+{t:'Separately Managed Account (SMA)',c:'Finance',g:'Fund Structures & Vehicles',d:`Instead of pooling into a commingled fund, a large investor's money sits in its own account managed to the same strategy. The investor gets transparency, control, and customized terms — and can't be dragged down by other investors' redemptions. Common for big institutions.`},
+{t:'Side pocket',c:'Finance',g:'Fund Structures & Vehicles',d:`A separate bucket inside a hedge fund holding illiquid or hard-to-value assets. Purpose: protects remaining investors, prevents unfair pricing during subscriptions and redemptions, and lets illiquid investments mature without forced selling. On a holdings sheet a "Side Pocket" line means those assets are segregated from the liquid portfolio.`},
+{t:'Continuation fund / vehicle',c:'Finance',g:'Fund Structures & Vehicles',d:`A new fund a GP creates to hold a strong asset ("trophy asset") longer instead of being forced to sell it, while still returning cash to LPs who want out. Think of it as refinancing your best investment to keep it without trapping the people who want to leave.`},
+{t:'Mutual fund',c:'Finance',g:'Fund Structures & Vehicles',d:`A pooled fund open to the general public, more regulated than a hedge fund, priced once daily at NAV after the close, bought/sold directly with the fund company. Generally no performance fees.`},
+{t:'Index fund / Pension fund',c:'Finance',g:'Fund Structures & Vehicles',d:`An index fund passively replicates a market index at very low cost. A pension fund manages retirement assets for workers and is one of the largest LP types in private markets.`},
+{t:'Closed-end fund',c:'Finance',g:'Fund Structures & Vehicles',d:`An investment fund with a fixed number of shares. Recent SEC changes have loosened rules letting these allocate more to PE/VC, which matters for the "private markets for the masses" trend.`},
+{t:'Interval fund',c:'Finance',g:'Fund Structures & Vehicles',d:`An SEC-registered closed-end company that periodically offers to repurchase a limited portion of its shares from investors at NAV — typically 5–25% of assets every quarter — rather than allowing daily redemptions or exchange trading. A halfway house between locked-up private funds and fully liquid public ones.`},
+{t:'ETF (exchange-traded fund)',c:'Finance',g:'Fund Structures & Vehicles',d:`A pooled fund that trades on an exchange throughout the day at a market price. Public, liquid, usually low-fee. Its tax efficiency comes from the in-kind creation/redemption mechanism: Authorized Participants swap baskets of securities for ETF shares rather than the fund selling holdings for cash, which avoids triggering capital gains and keeps the market price tethered to NAV (APs arbitrage away gaps).`},
+{t:'ETF vs. mutual fund',c:'Finance',g:'Fund Structures & Vehicles',d:`Same idea (a pooled vehicle), different plumbing — ETFs trade intraday on an exchange and are more tax-efficient; mutual funds price once a day at NAV and transact directly with the fund company.`},
+{t:'Active vs. passive ETF',c:'Finance',g:'Fund Structures & Vehicles',d:`A passive ETF mechanically tracks an index (e.g., the S&P 500); an active ETF has a manager making discretionary calls to beat a benchmark. Active funds charge more and require more hands-on compliance. An actively managed thematic ETF means someone is deciding the exposure rather than replicating an index.`},
+{t:'Gate',c:'Finance',g:'Fund Structures & Vehicles',d:`A provision letting a fund limit or suspend redemptions when too many investors try to withdraw at once (e.g., capping total redemptions at 10–25% of fund NAV per quarter). Protects the fund from being forced to dump illiquid assets at fire-sale prices to meet a redemption wave. The counterpart concept to the lock-up.`},
+{t:'Lock-up period',c:'Finance',g:'Fund Structures & Vehicles',d:`A period during which investors cannot withdraw their money from a fund (e.g., 1 year for many hedge funds; 90–180 days for post-IPO insider stock — note these are two different "lock-ups," fund-level vs. IPO-level).`},
+{t:'Redemption',c:'Finance',g:'Fund Structures & Vehicles',d:`The process by which an investor withdraws money from a fund, based on the fund's NAV. You submit a redemption request and receive capital back at NAV.`},
+{t:'Subscription',c:'Finance',g:'Fund Structures & Vehicles',d:`The flip side of redemption: the process of putting money into a fund. A "subscription document" is what an investor signs to commit capital and attest to their accredited/QP status.`},
+
+/* ---------- Fund Economics ---------- */
+{t:'GP (General Partner)',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The professional manager who runs a fund, makes investment decisions, and answers to investors. In a typical structure the GP sits alongside a management company (operations), the fund itself (which holds the investments), the LPs (who provide capital), and the portfolio companies (portcos) that receive the investment.`},
+{t:'LP (Limited Partner)',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The investor who provides the money but doesn't manage it: pension funds, endowments, family offices, wealthy individuals.`},
+{t:'2 and 20',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The classic private-fund fee structure: a 2% annual management fee (paid regardless of performance) plus 20% carried interest on profits. In theory: the fee keeps the lights on, the carry is how you get rich by performing well. The scale problem: 2% of a small fund is modest, but 2% of a huge fund is enormous guaranteed cash paid every year whether or not the fund makes money — at which point the management fee stops being "cover costs" and becomes a risk-free profit engine, and a manager can get wealthy simply by gathering assets. Two consequences: fees have compressed (2-and-20 is no longer automatic at large funds), and investors watch for asset-gathering — a manager who keeps raising past the point where size helps returns is optimizing for fees, not performance.`},
+{t:'Management fee',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The flat annual fee (typically 2% of AUM/committed capital) paid regardless of performance, meant to cover salaries, rent, research, operations. A $1B fund collects $20M/year even if it loses money — the heart of the scale critique.`},
+{t:'Performance fee (incentive fee)',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The manager's cut of the profits, typically 20%. Where the real money is made, and the whole point is to align the manager with investors — they win when you win. The subtlety is in which profits count, governed by the hurdle rate and high watermark.`},
+{t:'Hurdle rate / preferred return',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The minimum return a fund must clear before the manager earns any performance fee/carry (commonly ~7–9%; 8% is the canonical example). The logic: if an investor could have earned 5% in Treasuries, the manager shouldn't get paid 20% of the first 5% — only for returns above what was freely available. "Hurdle rate" in hedge-fund language and "preferred return" in PE language are the same idea in different clothes.`},
+{t:'High watermark',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`A rule that the manager only earns performance fees when the fund's value exceeds its previous highest point. If the fund drops and recovers, the manager earns nothing on the rebound until investors are made whole — it stops a manager from getting paid twice for the same dollar of gains. Example: a fund falls $1.15B → $920M, so no performance fee; in the recovery year the fee is charged only on growth above the old $1.15B peak, not the full bounce from $920M.`},
+{t:'Benchmark',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`A reference point for measuring performance (the S&P 500, a bond index). Hurdle rates are frequently set relative to one.`},
+{t:'Carried interest (carry)',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The GP's share of fund profits, customarily ~20%. The PE/VC equivalent of the hedge-fund "performance fee." Carry is the number that makes private-equity careers lucrative, and the entire waterfall exists to determine when and how much of it the GP collects.`},
+{t:'Distribution waterfall',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The agreed rules for the order in which a fund's profits get paid between LPs and GPs. The name is the analogy: cash fills one tier completely before spilling into the next, like water down a slope. Its job is to make the payout order explicit and contractual. The four tiers, in order: (1) Return of capital — LPs recoup every dollar first; (2) Preferred return — LPs keep receiving until they hit the minimum return; (3) Catch-up — the GP then takes most/all of the next distributions until "caught up" to its agreed profit share; (4) Split — everything left is divided by a preset ratio, typically 80/20 (LPs/GPs).`},
+{t:'Catch-up',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The waterfall tier where, once LPs have their preferred return, the GP takes most or all of the next distributions until it is "caught up" to its agreed profit share (usually 20%). This lets the GP's slice be calculated on the whole profit, not just the portion above the hurdle.`},
+{t:'American waterfall (deal-by-deal)',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`Carry is calculated and paid on each individual deal as it exits, so GPs can collect carry on a winner before LPs have recovered all their capital across the whole fund. GP-friendly (paid sooner); common in VC. Risk to LPs: a GP could pocket carry on early winners while later deals flop — which is why it pairs with a clawback.`},
+{t:'European waterfall (whole-fund)',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`Carry is paid only after LPs recover all capital across the entire fund and meet their preferred return. LP-friendly, simpler to administer, and the global majority standard. Trade-off: GPs wait much longer to get paid. LP-aligned managers tend to favor it — useful framing when describing a product to a prospective investor.`},
+{t:'Clawback provision',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The LP's right to reclaim overpaid carry. If, at the fund's end, the GP collected more carry than it was entitled to (early deals paid out, later ones lost money), the clawback recovers the excess. It's what makes the American model tolerable for LPs; the European model rarely needs one, since the GP only gets paid at the end. LPs further protect themselves with escrows and holdbacks.`},
+{t:'Escrows',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`A portion of the GP's carry held back in a separate escrow account during the fund's life, rather than paid out immediately, so there is cash available to satisfy a future clawback if early carry turns out to have been overpaid. A pre-funded safety net for LPs.`},
+{t:'Holdbacks',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The GP withholding a percentage of each carry distribution (e.g., paying 80% of carry owed and retaining 20%) as protection against a later clawback. Closely related to escrows — both delay full carry payment so overpayments can be corrected without chasing money the GP has already spent.`},
+{t:'Limited Partnership Agreement (LPA)',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The master contract governing a private fund. Spells out the waterfall, hurdle rate, carry percentage — all the economic terms. When people say "it's in the LPA," this is the document.`},
+{t:'Capital contributions / Fund term',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`Capital contributions are the money LPs actually pay in; "returning capital contributions" is Tier 1 of the waterfall. The fund term is its full lifespan (often ~10 years), at the end of which final accounting — including any clawback — happens.`},
+{t:'Waterfall: timing vs. amount',c:'Finance',g:'Fund Economics — Fees & Waterfalls',d:`The mental model tying the section together: a distribution waterfall is the PE answer to the same question hedge funds answer with high watermarks and hurdle rates — only pay the manager when investors actually win, and in the right order. The punchline: under both American and European waterfalls the GP ends up with roughly the same total carry — the fight is over timing, not amount. But timing is value. Discounting a $20M carry stream at 10%, the American (paid early) structure is worth ~$11.3M in present value vs. ~$7.7M for the European (paid at the end) — about 47% more, despite identical headline dollars. Early carry is worth even more than discounting suggests, because the GP can reinvest it and because early distributions sharply boost reported IRR, the metric that drives future fundraising. The catch: American early carry carries clawback risk. "Same total" is never the same when cash arrives at different times.`},
+
+/* ---------- Capital Markets Foundations ---------- */
+{t:'Financial statements',c:'Finance',g:'Capital Markets Foundations',d:`The three-statement model — income statement, balance sheet, cash flow statement. These are the outputs of accounting. They exist for every company, public or private.`},
+{t:'Securities filings / registration documents',c:'Finance',g:'Capital Markets Foundations',d:`10-K, 10-Q, 8-K, S-1, and so on. These are regulatory disclosure vehicles that wrap the financial statements (plus a lot else) and exist only because the SEC mandates them for public or going-public companies.`},
+{t:'Primary vs. secondary',c:'Finance',g:'Capital Markets Foundations',d:`One of the two axes that organize all of investing: whether the asset already exists when you buy it. Primary = you buy newly created shares and the cash goes to the company. Secondary = you buy already-existing shares from another owner and the company gets nothing. Cross this with the public/private axis to get four quadrants: public+primary = an IPO; public+secondary = ordinary exchange trading; private+primary = committing to a new PE/VC fund or buying newly-issued startup shares; private+secondary = buying an existing LP's stake or shares from a startup employee.`},
+{t:'Primary investing (primary market)',c:'Finance',g:'Capital Markets Foundations',d:`You put money directly into a company by buying brand-new shares it creates. The cash goes to the company to spend on hiring, products, growth. Analogy: a venue selling fresh tickets and keeping the revenue. Primary investing causes dilution and strengthens the balance sheet by adding cash.`},
+{t:'Secondary investing (secondary market)',c:'Finance',g:'Capital Markets Foundations',d:`You buy already-existing shares from someone who already owns them (an early employee, founder, or earlier investor). The company gets nothing; money goes to the seller. Analogy: reselling your concert ticket — the venue isn't involved. No new shares created, so no dilution. Late-stage vehicles lean on secondaries because hot pre-IPO names don't run frequent primary rounds, and secondaries let you buy at a known valuation, sometimes at a discount. The underwriting nuance: you must distinguish a liquidity seller (selling for personal cash reasons) from an informed seller (selling because they think the asset is overpriced). That's the real work.`},
+{t:'Securities',c:'Finance',g:'Capital Markets Foundations',d:`A catch-all for tradable financial instruments representing value. Shares (ownership) and bonds (debt) are both securities.`},
+{t:'Shares / equity',c:'Finance',g:'Capital Markets Foundations',d:`A slice of ownership in a company. Own shares, own a piece of the business and its future profits.`},
+{t:'Dilution',c:'Finance',g:'Capital Markets Foundations',d:`When a company issues new shares, existing owners' slices shrink as a percentage even though the number they hold is unchanged. Own 1 of 8 slices = 12.5%; recut into 16 and your slice is 6.25%. Primary investing causes it; secondary does not.`},
+{t:'Balance sheet',c:'Finance',g:'Capital Markets Foundations',d:`A financial snapshot of what a company owns (assets) and owes (liabilities) at a point in time. A primary investment adds cash and "strengthens the balance sheet."`},
+{t:'Income Statement (P&L)',c:'Finance',g:'Capital Markets Foundations',d:`Reports revenue, expenses, and resulting profit over a period (a quarter or year), prepared on an accrual basis: revenue is booked when earned and expenses when incurred, not when cash actually moves — which is why a company can report a profit and still go bankrupt. Read it top-to-bottom as a cascade: Revenue → Gross Profit → Operating Income → Net Income, where each level isolates a different question. Gross margin signals pricing power and unit economics; operating margin signals cost discipline and operating leverage; net margin gets muddied by taxes, interest, and one-time items. Analysts care more about the trajectory and quality of these margins than the absolute number.`},
+{t:'Cash Flow Statement',c:'Finance',g:'Capital Markets Foundations',d:`Reconciles net income to actual cash generated or consumed over a period, split into Operating, Investing, and Financing activities. This is the statement professionals trust most, because cash is the hardest thing to fake — the income statement is full of management judgment, and the cash flow statement cuts through it. Free Cash Flow (operating cash flow minus capex) lives here and is what most valuation ultimately rests on. A classic tell: if net income is growing but operating cash flow is flat or shrinking, something's wrong — aggressive revenue recognition, ballooning receivables, channel stuffing.`},
+{t:'Three-statement linkage',c:'Finance',g:'Capital Markets Foundations',d:`The three statements are linked, not independent. Net income from the income statement flows into retained earnings on the balance sheet and is the starting line of the cash flow statement; the cash flow statement's ending cash ties back to the balance sheet. Understanding how a change in one ripples through all three is the foundation of the "three-statement model" — the first thing you build in any modeling course, and the thing that separates people who understand financials from people who just read them.`},
+{t:'10-K',c:'Finance',g:'Capital Markets Foundations',d:`The single most authoritative document a public company produces about itself — an audited, regulated, standardized annual filing where the company makes legal representations under penalty of securities law. The CEO and CFO personally certify it (a post-Sarbanes-Oxley requirement). That legal liability is why professionals trust it more than a glossy annual report or earnings press release: management has strong incentives not to lie in it, even when they're happy to spin everything else.`},
+{t:'10-Q',c:'Finance',g:'Capital Markets Foundations',d:`The quarterly SEC report, filed for Q1–Q3 (Q4 gets absorbed into the 10-K). A lighter, more frequent version of the 10-K. It's unaudited (lower assurance) but timely — analysts use it to track quarter-over-quarter trends and catch deterioration early. The MD&A and footnotes are thinner than a 10-K's but still where the action is.`},
+{t:'8-K',c:'Finance',g:'Capital Markets Foundations',d:`A "current report" filed to disclose material events between scheduled filings — within four business days of the event. The breaking-news filing. This is where you find the things that move stocks: executive departures, M&A, earnings releases, auditor changes, bankruptcy, material contracts, debt defaults. An auditor resignation or unexpected CFO departure buried in an 8-K is often the first public sign of trouble.`},
+{t:'S-1',c:'Finance',g:'Capital Markets Foundations',d:`The initial registration statement a private company files with the SEC to go public via IPO — its coming-out document, the first time it's forced to open its books to the public. It contains audited financials (often for the first time), full risk factors, use of proceeds, the cap table, MD&A, and insight into ownership and lockups. For an allocator, the S-1 is where you learn whether the private marks you'd been carrying were realistic — it's the bridge between the private and public valuation regimes, converting an estimated private mark into a market-validated (and lockup-governed) public number.`},
+{t:'DEF 14A (Proxy Statement)',c:'Finance',g:'Capital Markets Foundations',d:`The filing sent ahead of the annual shareholder meeting, covering matters up for a vote. The governance and "who gets paid what" document — where executive compensation, board composition, related-party transactions, and shareholder proposals live. If you want to assess management incentive alignment, the proxy is the primary source: it tells you whether the CEO is paid for performance or just for showing up.`},
+{t:'Funding rounds (seed, Series A/B/C)',c:'Finance',g:'Capital Markets Foundations',d:`Sequential stages of raising money as a startup grows. Pre-seed/seed are earliest and smallest; A/B/C come later as the company matures and (usually) becomes more valuable. Each round typically issues new shares (primary).`},
+{t:'Capital infusion',c:'Finance',g:'Capital Markets Foundations',d:`A fancy way of saying an injection of money into a business.`},
+{t:'Valuation',c:'Finance',g:'Capital Markets Foundations',d:`The estimated total worth of a company. Determines how much of the company an investor gets for their money. Earlier rounds = lower valuation = cheaper shares but higher risk.`},
+{t:'Liquidity',c:'Finance',g:'Capital Markets Foundations',d:`How easily an asset can be turned into cash. Public stocks are highly liquid; private startup shares are illiquid, often locked up for years.`},
+{t:'Liquidity event',c:'Finance',g:'Capital Markets Foundations',d:`A moment that lets investors finally cash out, usually an IPO or acquisition.`},
+{t:'IPO (Initial Public Offering)',c:'Finance',g:'Capital Markets Foundations',d:`When a private company first sells shares to the public and lists on an exchange. A major liquidity event, and a public+primary transaction (the company raises new capital).`},
+{t:'Acquisition / M&A',c:'Finance',g:'Capital Markets Foundations',d:`When one company buys another. Also a way investors cash out.`},
+{t:'Holding period',c:'Finance',g:'Capital Markets Foundations',d:`How long you own an investment before selling. Private markets often mean 5–10+ years.`},
+{t:'Underwriter',c:'Finance',g:'Capital Markets Foundations',d:`The financial institution (usually an investment bank) that helps a company price and sell new securities in a primary offering like an IPO.`},
+
+/* ---------- Private Markets ---------- */
+{t:'Private equity (PE)',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`Investing in companies that aren't publicly traded, often buying mature businesses and improving them.`},
+{t:'Venture capital (VC)',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`A type of private investing focused on funding young, high-growth startups.`},
+{t:'Growth equity',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`The middle ground between VC and buyout PE: minority investments in companies already growing fast and generating revenue — past startup risk, not yet mature. Less about fixing a business (PE) or betting on a seed (VC), more about pouring fuel on something already working.`},
+{t:'AUM (Assets Under Management)',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`The total money a fund manages.`},
+{t:'Dry powder',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`Committed money a fund has available but hasn't invested yet. "$288B in secondary dry powder" means that much cash is waiting to buy secondary stakes.`},
+{t:'Commitment vs. called/uncalled capital',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`When you become an LP you make a commitment (e.g., $10M) — a promise to provide that money over time. The GP doesn't take it all at once; it issues capital calls as deals arise. The portion already drawn is called capital; the rest is uncalled (your dry-powder obligation). This is why LPs must keep liquidity on hand — a capital call can come on short notice.`},
+{t:'Capital call / drawdown',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`The GP's formal request for an LP to wire in a portion of its committed capital to fund a specific investment or expense.`},
+{t:'Recycling',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`When a fund reinvests early proceeds or returned capital into new deals rather than distributing it, effectively investing more than the committed capital base. Governed by limits in the LPA.`},
+{t:'J-Curve effect',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`In private equity, returns often dip early (fees and costs hit before investments mature) then rise later, tracing a "J." Secondaries soften this because you're buying into already-developed assets.`},
+{t:'Vintage year',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`The year a PE or VC fund begins investing. Used to compare funds against peers raised in the same environment — a 2007 vintage and a 2021 vintage faced very different markets.`},
+{t:'Blind pool risk',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`The risk of committing money to a fund before you know what it will invest in. When you make a primary commitment, you're handing the GP money before they've bought anything — trusting them to find good deals. Secondaries reduce this: you buy after deployment, so the fund already owns identifiable, visible companies. The blindness is gone.`},
+{t:'LP-led secondary',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`An LP sells its stake in a fund to another investor, usually to free up cash or rebalance.`},
+{t:'GP-led secondary',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`The fund manager orchestrates a deal to move assets, often into a new vehicle (see continuation fund), rather than an LP simply selling out.`},
+{t:'Rights of First Refusal (ROFR)',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`A contractual right letting the company (or existing shareholders) match any offer and buy shares before an outside buyer can. Can block or delay secondary sales.`},
+{t:'Due diligence',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`The investigation before investing — checking financials, legal rights, valuation, compliance — to confirm the deal is sound.`},
+{t:'Revenue-based financing',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`Funding repaid as a percentage of revenue rather than via equity or fixed loans. Flexible and non-dilutive.`},
+{t:'Microloans',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`Small loans; a lower-risk financing route than giving up equity.`},
+{t:'Non-dilutive debt',c:'Finance',g:'Private Markets — PE, VC & Secondaries',d:`Financing that doesn't require giving up ownership — a $10M loan instead of selling equity. Founders and shareholders avoid dilution; the drawback is the debt must be repaid.`},
+
+/* ---------- Hedge Fund Strategies ---------- */
+{t:'Merger arbitrage (risk arb)',c:'Finance',g:'Hedge Fund Strategies',d:`An event-driven strategy that profits from the price spread between a target company's current stock price and the acquisition price offered in a pending deal. The fund buys the target after a deal is announced (when it usually trades below the offer price) and earns the spread if the deal closes — while bearing the risk that it breaks. The core underwriting question is deal-completion probability.`},
+{t:'Long/short equity',c:'Finance',g:'Hedge Fund Strategies',d:`Long undervalued, short overvalued — taking explicit views on which stocks rise or fall (e.g., long a chipmaker on an AI-spend thesis, short a rival on a share-loss thesis).`},
+{t:'Global macro',c:'Finance',g:'Hedge Fund Strategies',d:`Top-down bets on rates, currencies, and commodities.`},
+{t:'Event-driven',c:'Finance',g:'Hedge Fund Strategies',d:`Profits from corporate events: mergers, acquisitions, restructurings, spin-offs, bankruptcies, activist campaigns. A merger-arb fund buys a target and bets the deal closes.`},
+{t:'Relative value / arbitrage',c:'Finance',g:'Hedge Fund Strategies',d:`Profits from pricing discrepancies between related securities while minimizing market exposure — e.g., long one Treasury, short a similar Treasury, profit as the spread converges.`},
+{t:'Multi-strategy',c:'Finance',g:'Hedge Fund Strategies',d:`Several strategies run under one roof. The point of combining them is to blend uncorrelated return streams so the overall result is smoother than any single one.`},
+{t:'Managed futures / CTA',c:'Finance',g:'Hedge Fund Strategies',d:`Trend-following across futures markets.`},
+{t:'Credit / Activist',c:'Finance',g:'Hedge Fund Strategies',d:`Credit strategies trade debt instruments; activist strategies take stakes to push for corporate change.`},
+{t:'Quant fund',c:'Finance',g:'Hedge Fund Strategies',d:`Trades using mathematical models and algorithms rather than human judgment about individual companies. Renaissance Technologies' Medallion is the legendary example.`},
+{t:'Long-biased fund',c:'Finance',g:'Hedge Fund Strategies',d:`Mostly bets on things going up (net long), with less short exposure. Charges notably lower fees (roughly 0.85%/10.5%) — partly because it's closer to what you could get cheaply elsewhere.`},
+{t:'Going long and short',c:'Finance',g:'Hedge Fund Strategies',d:`Long = buying expecting a rise; short = betting on a fall (profiting when it drops). The ability to do both is what theoretically lets a fund make money when markets fall — hence "hedge."`},
+{t:'Leverage',c:'Finance',g:'Hedge Fund Strategies',d:`Borrowed money used to amplify positions. Magnifies both gains and losses; a core source of hedge-fund risk.`},
+{t:'Gross vs. net exposure',c:'Finance',g:'Hedge Fund Strategies',d:`Gross = longs + shorts (total capital at work, a measure of how levered/active the book is); net = longs − shorts (the directional market bet). A fund can be 200% gross but 10% net — very active, barely directional. This is how you read whether a "long/short" fund is really hedged or just levered long.`},
+{t:'Prime broker',c:'Finance',g:'Hedge Fund Strategies',d:`The bank that services a hedge fund — lends securities for shorting, extends margin/leverage, clears trades, holds assets. The fund's operational backbone.`},
+{t:'Short squeeze',c:'Finance',g:'Hedge Fund Strategies',d:`When a heavily-shorted stock rises sharply, forcing shorts to buy back to cover, which pushes the price higher still — a feedback loop (GameStop, 2021).`},
+
+/* ---------- Performance & Return Metrics ---------- */
+{t:'IRR (Internal Rate of Return)',c:'Finance',g:'Performance & Return Metrics',d:`The annualized return generated by an investment, accounting for the timing of cash flows. The headline metric in private markets — and, because it's timing-sensitive, the reason early distributions flatter a GP's track record.`},
+{t:'MOIC (Multiple on Invested Capital)',c:'Finance',g:'Performance & Return Metrics',d:`Total value returned ÷ capital invested, ignoring time. A 3x MOIC means you tripled your money — but says nothing about how fast. IRR and MOIC together tell the full story; one without the other is half the picture: 3x over 3 years is spectacular, 3x over 15 years is mediocre.`},
+{t:'DPI (Distributed to Paid-In)',c:'Finance',g:'Performance & Return Metrics',d:`How much cash investors have actually received back relative to what they put in. "Real money in hand" — a DPI of 1.0x means you've gotten all your capital back.`},
+{t:'TVPI (Total Value to Paid-In)',c:'Finance',g:'Performance & Return Metrics',d:`Current value plus distributions relative to invested capital. Includes unrealized (paper) value, so it's more optimistic than DPI. The gap between TVPI and DPI is value still locked in the fund.`},
+{t:'Gross vs. net returns',c:'Finance',g:'Performance & Return Metrics',d:`Gross = before fees and carry; net = what the LP actually keeps after the manager's cut. Always ask which one a manager is quoting — the gap is the entire cost of the fund.`},
+{t:'Alpha',c:'Finance',g:'Performance & Return Metrics',d:`Return above a benchmark — the skill-based excess. If the market returns 10% and you return 13%, the 3% is alpha. Generating alpha is the entire justification for hedge-fund fees — and the uncomfortable truth is most funds fail to produce it consistently.`},
+{t:'Beta',c:'Finance',g:'Performance & Return Metrics',d:`Sensitivity to overall market movements. A beta of 1.0 moves with the market; above 1 is more volatile, below 1 less.`},
+{t:'Sharpe ratio',c:'Finance',g:'Performance & Return Metrics',d:`Return per unit of risk. Higher is better risk-adjusted performance. The standard way to ask "was this return worth the volatility?"`},
+{t:'Absolute vs. relative returns',c:'Finance',g:'Performance & Return Metrics',d:`Absolute = making money in any environment, up or down (the original hedge-fund promise). Relative = just beating a benchmark, even if both are negative.`},
+{t:'Outflows',c:'Finance',g:'Performance & Return Metrics',d:`Investor money leaving a fund (redemptions). Large industry outflows are the market voting with its feet on the fee-vs-performance question.`},
+
+/* ---------- Company & Business-Quality Metrics ---------- */
+{t:'ARR (Annual Recurring Revenue)',c:'Finance',g:'Company & Business-Quality Metrics',d:`The annualized value of recurring subscription revenue (1,000 customers × $100/mo = $100K MRR = $1.2M ARR). One of the most important SaaS metrics — it measures predictable revenue.`},
+{t:'MRR (Monthly Recurring Revenue)',c:'Finance',g:'Company & Business-Quality Metrics',d:`Recurring subscription revenue per month.`},
+{t:'NRR (Net Revenue Retention)',c:'Finance',g:'Company & Business-Quality Metrics',d:`How existing-customer revenue changes over time (expansions minus churn/downgrades). Above 100% means existing customers spend more each year even before new logos — the gold standard of SaaS health.`},
+{t:'CAC (Customer Acquisition Cost)',c:'Finance',g:'Company & Business-Quality Metrics',d:`What it costs to acquire a customer.`},
+{t:'LTV (Lifetime Value)',c:'Finance',g:'Company & Business-Quality Metrics',d:`Expected profit from a customer over their lifetime.`},
+{t:'LTV/CAC',c:'Finance',g:'Company & Business-Quality Metrics',d:`One of the most important SaaS ratios. 3x+ is generally attractive — you're getting back at least three dollars of lifetime value for every dollar spent acquiring a customer.`},
+{t:'Burn rate',c:'Finance',g:'Company & Business-Quality Metrics',d:`How much cash a company loses per month.`},
+{t:'Runway',c:'Finance',g:'Company & Business-Quality Metrics',d:`How long a company can survive before needing more capital. Runway = Cash Balance ÷ Monthly Burn.`},
+{t:'Gross margin',c:'Finance',g:'Company & Business-Quality Metrics',d:`Revenue minus direct costs, as a percentage of revenue. Elite software companies often exceed 75% — the structural reason software is such a good business.`},
+{t:'EBITDA',c:'Finance',g:'Company & Business-Quality Metrics',d:`Earnings Before Interest, Taxes, Depreciation, and Amortization. A proxy for operating cash flow. Be skeptical when a company leans on it — it strips out real costs like capex.`},
+{t:'TAM / SAM / SOM',c:'Finance',g:'Company & Business-Quality Metrics',d:`TAM (Total Addressable Market) is the total potential revenue opportunity. Pair it with SAM (serviceable addressable) and SOM (serviceable obtainable) to move from fantasy to a realistic estimate of what a company could actually capture.`},
+
+/* ---------- Valuation ---------- */
+{t:'Enterprise Value (EV)',c:'Finance',g:'Valuation',d:`The total value of a business including debt. EV = Market Cap + Debt − Cash. Think of EV as the theoretical price to acquire the entire company. Why it matters: two companies with $10B market caps aren't equally valuable if one carries $5B of debt and the other none. (The full formula also adds preferred stock and minority interest, but the simplified version is what you'll use most.)`},
+{t:'Comparable companies ("comps")',c:'Finance',g:'Valuation',d:`Valuing a company by looking at the trading multiples of similar public companies ("trading comps"). The fastest, most common valuation cross-check.`},
+{t:'Precedent transactions',c:'Finance',g:'Valuation',d:`Valuing a company by what similar companies were acquired for in past M&A deals. Usually richer than trading comps because acquisitions include a control premium.`},
+{t:'Revenue / EBITDA multiples',c:'Finance',g:'Valuation',d:`Shorthand valuation ratios — EV/Revenue for fast-growing or unprofitable companies (where earnings don't yet exist), EV/EBITDA for mature, profitable ones. P/E (price-to-earnings) values equity directly against net income.`},
+{t:'DCF (Discounted Cash Flow)',c:'Finance',g:'Valuation',d:`Valuing a company by projecting its future cash flows and discounting them to today using a required rate of return. The most first-principles method — and the most sensitive to assumptions.`},
+{t:'WACC (Weighted Average Cost of Capital)',c:'Finance',g:'Valuation',d:`The discount rate in a DCF — the blended cost of a company's debt and equity. The hurdle a project's returns must beat to create value.`},
+{t:'Terminal value',c:'Finance',g:'Valuation',d:`The estimated value of all cash flows beyond the explicit forecast period — usually the majority of a DCF's total value, which is why small changes in terminal assumptions swing the whole valuation.`},
+{t:'Multiple expansion',c:'Finance',g:'Valuation',d:`A stock rises because investors are willing to pay a higher valuation multiple (20x earnings → 30x), independent of earnings growth. The "re-rating" half of returns, as opposed to fundamental growth.`},
+{t:'NAV (Net Asset Value)',c:'Finance',g:'Valuation',d:`The value of a fund's (or company's) assets minus liabilities. A "NAV enterprise" is a business whose value derives primarily from the NAV of investments it owns rather than from operating cash flows.`},
+{t:'Cost basis vs. current value',c:'Finance',g:'Valuation',d:`A common trap: in private-fund tear sheets, an "at cost" weighting reflects the original capital allocation decision, not the current mark. Read that distinction carefully or you'll misjudge what a fund actually holds today.`},
+
+/* ---------- Credit & the Debt Side ---------- */
+{t:'Credit',c:'Finance',g:'Credit & the Debt Side',d:`Investing in debt instruments rather than equity — corporate bonds, loans, structured credit, distressed debt. You earn interest and principal repayment instead of owning part of the company.`},
+{t:'Private credit',c:'Finance',g:'Credit & the Debt Side',d:`Loans made outside traditional banks by private investment firms — direct lending, unitranche loans, mezzanine debt. Major players include Apollo, Ares, and Blackstone. One of the fastest-growing areas in alternatives as banks retreat from lending.`},
+{t:'Distressed debt',c:'Finance',g:'Credit & the Debt Side',d:`Buying the debt of troubled borrowers cheaply (as the IOUs become nearly worthless and panicked owners dump them), then fighting to collect far more than you paid.`},
+{t:'Mezzanine debt',c:'Finance',g:'Credit & the Debt Side',d:`Subordinated debt that sits between senior debt and equity — higher risk, higher yield, often with equity-like upside (warrants).`},
+{t:'Unitranche',c:'Finance',g:'Credit & the Debt Side',d:`A single loan that blends senior and subordinated debt into one instrument at one blended rate — simpler for the borrower.`},
+{t:'Yield',c:'Finance',g:'Credit & the Debt Side',d:`The return a bond pays relative to its price. As price falls, yield rises (and vice versa) — the single most important inverse relationship in fixed income.`},
+{t:'Spread',c:'Finance',g:'Credit & the Debt Side',d:`The extra yield a risky bond pays over a "risk-free" Treasury of the same maturity. Compensation for credit risk; spreads widen in stress, tighten in calm. The market's real-time fear gauge for credit.`},
+{t:'Duration',c:'Finance',g:'Credit & the Debt Side',d:`A bond's price sensitivity to interest-rate changes. Higher duration = more price movement when rates move. Why long-dated bonds got crushed in 2022's rate hikes.`},
+{t:'Covenant',c:'Finance',g:'Credit & the Debt Side',d:`Contractual rules a borrower must follow (maintain certain ratios, limit new debt). "Covenant-lite" loans have few — a sign of a borrower-friendly, frothy credit market.`},
+{t:'Seniority',c:'Finance',g:'Credit & the Debt Side',d:`Where a claim sits in the repayment line if the borrower fails. Senior secured debt gets paid first (and is backed by collateral); subordinated/junior debt and equity sit below. This is the capital stack, viewed from the lender's side.`},
+{t:'Default',c:'Finance',g:'Credit & the Debt Side',d:`When a borrower fails to make a required payment or breaches a covenant. The event distressed investors underwrite around.`},
+{t:'Credit rating',c:'Finance',g:'Credit & the Debt Side',d:`A third-party score (Moody's, S&P, Fitch) of default risk. Investment-grade (BBB-/Baa3 and above) versus high-yield ("junk," below that).`},
+
+/* ---------- Capital Stack & Stocks ---------- */
+{t:'Capital stack',c:'Finance',g:'The Capital Stack & Stocks',d:`The layering of who gets paid first if a company is liquidated, from safest (top) to riskiest (bottom): senior secured debt → senior unsecured debt → subordinated debt → preferred equity → common equity. Higher in the stack = paid first, lower risk, lower return. This single ladder organizes credit, preferreds, and common stock into one picture.`},
+{t:'Preferreds ("prefs")',c:'Finance',g:'The Capital Stack & Stocks',d:`Preferred shares that usually pay a fixed dividend and sit above common equity but below debt in the stack. Skipping a preferred dividend isn't a "default" like a missed bond payment, but it signals distress — and you typically can't pay common dividends or take other shareholder-friendly actions until you catch up on the prefs.`},
+{t:'Common stock',c:'Finance',g:'The Capital Stack & Stocks',d:`The base layer of ownership. Last in line if things go wrong, but holds the unlimited upside if things go right.`},
+{t:'Member interest',c:'Finance',g:'The Capital Stack & Stocks',d:`An ownership stake in an LLC (rather than a corporation) — the LLC analogue to a "share." You'll see this in fund and SPV structures organized as LLCs.`},
+{t:'Float',c:'Finance',g:'The Capital Stack & Stocks',d:`The number of a company's shares actually available for public trading — total shares outstanding minus restricted and insider-held stock. A small float means thin liquidity and sharper price swings on a given order, since fewer shares change hands. (Distinct from insurance "float," which is premium money an insurer holds before paying claims.)`},
+{t:'Company vs. fund vs. allocator',c:'Finance',g:'The Capital Stack & Stocks',d:`A distinction worth keeping straight: don't conflate investable assets / operating companies with fund managers / allocators. A company you analyze, the fund that owns it, and the allocator that hires that fund are three distinct rungs of the capital chain. Mixing them up is a common analytical error.`},
+
+/* ---------- Indices, ETFs & Market Shorthand ---------- */
+{t:'HFRI',c:'Finance',g:'Indices, ETFs & Market Shorthand',d:`The Hedge Fund Research Index — specifically the HFRI Fund Weighted Composite Index (HFRIFWC) — the leading benchmark for hedge fund industry performance.`},
+{t:'TTM (Trailing Twelve Months)',c:'Finance',g:'Indices, ETFs & Market Shorthand',d:`The most recent 12-month period of a company's financial performance. Used to get a current, rolling read on results rather than waiting for the fiscal year.`},
+{t:'Inflection point',c:'Finance',g:'Indices, ETFs & Market Shorthand',d:`When a growth rate changes direction — typically when growth accelerates after a period of deceleration (or vice versa). Markets pay up for positive inflections because they signal a change in trajectory, not just level.`},
+{t:'Re-inflection',c:'Finance',g:'Indices, ETFs & Market Shorthand',d:`After growth has slowed or posted a negative inflection, a second inflection back to acceleration. A re-acceleration story.`},
+{t:'RegTech',c:'Finance',g:'Indices, ETFs & Market Shorthand',d:`Regulatory technology — the application of technology to simplify and enhance regulatory compliance, particularly in heavily regulated industries like financial services.`},
+{t:'BOTZ',c:'Finance',g:'Indices, ETFs & Market Shorthand',d:`The Global X Robotics & Artificial Intelligence ETF — an actively managed ETF investing in companies involved in developing and producing robots and AI.`},
+{t:'KBWB',c:'Finance',g:'Indices, ETFs & Market Shorthand',d:`The Invesco KBW Bank ETF — a U.S.-listed fund tracking the KBW Nasdaq Bank Index, giving targeted exposure to the U.S. banking sector.`},
+
+/* ---------- Macro, Rates & Liquidity (Economics) ---------- */
+{t:'The macro lens',c:'Economics',g:'Macro, Rates & Liquidity',d:`The organizing idea: every market move ultimately traces back to the price of money (rates), the quantity of money (liquidity), and who's forced to do what (positioning/flows). Always ask who benefits and what incentives drive behavior.`},
+{t:'Monetary policy',c:'Economics',g:'Macro, Rates & Liquidity',d:`How the central bank (the Fed) influences the economy through interest rates and the money supply. Loose/accommodative policy (low rates, more liquidity) fuels risk assets; tight policy (high rates) drains them.`},
+{t:'The Federal Reserve & its dual mandate',c:'Economics',g:'Macro, Rates & Liquidity',d:`The U.S. central bank, charged with maximum employment and stable prices (≈2% inflation). These two goals can conflict — fighting inflation often means slowing the economy and jobs — which is the central tension the Fed constantly navigates.`},
+{t:'Fiscal policy',c:'Economics',g:'Macro, Rates & Liquidity',d:`The government's lever: spending, taxation, and deficits. Distinct from monetary policy (the Fed). Big deficits can stimulate growth but raise debt and can pressure rates.`},
+{t:'ZIRP (Zero Interest Rate Policy)',c:'Economics',g:'Macro, Rates & Liquidity',d:`Holding short-term rates at or near 0% to stimulate growth. The defining condition of the 2010s and 2020–21.`},
+{t:'ZIRP-era story / "story stock"',c:'Economics',g:'Macro, Rates & Liquidity',d:`A speculative investment that thrived on cheap borrowing, abundant liquidity, and investors' willingness to pay up for growth potential over current profits — pre-IPO unicorns, crypto and meme stocks in 2020–21, the SPAC wave. When rates rose in 2022, this whole cohort re-rated hard — arguably the single most important regime shift of the past decade.`},
+{t:'Quantitative easing / tightening (QE / QT)',c:'Economics',g:'Macro, Rates & Liquidity',d:`QE = the Fed buying bonds to inject liquidity and push down long rates (used when short rates are already at zero); QT = the reverse, draining liquidity. The "quantity of money" lever, alongside the "price of money" (rates) lever.`},
+{t:'Real vs. nominal rates',c:'Economics',g:'Macro, Rates & Liquidity',d:`Nominal is the stated rate; real is nominal minus inflation — the return that actually grows your purchasing power. Markets care about real rates: a 5% nominal rate with 6% inflation is a negative real rate.`},
+{t:'Yield curve',c:'Economics',g:'Macro, Rates & Liquidity',d:`The plot of Treasury yields across maturities. Normally upward-sloping; an inverted curve (short rates above long rates) has historically been a recession warning, because it signals markets expect the Fed to cut rates as growth slows.`},
+{t:'Inflation',c:'Economics',g:'Macro, Rates & Liquidity',d:`The rate at which prices rise, eroding purchasing power. The variable that drives Fed policy, real rates, and ultimately asset valuations.`},
+{t:'Flows / positioning / liquidity',c:'Economics',g:'Macro, Rates & Liquidity',d:`Beyond fundamentals, prices move because of who is forced to buy or sell. Crowded positioning unwinds violently; liquidity conditions determine how far prices move on a given trade. Over short horizons this is often more important than fundamentals.`},
+];
+
+/* ============================== state ============================== */
+let state={ terms:[], resources:[], progress:{}, view:'library', scope:'all', query:'' };
+
+function seedTerms(){
+  return SEED.map(s=>({ id:slug(s.t)||uid(), term:s.t, def:s.d, category:s.c, group:s.g }));
+}
+function pstatus(id){ const p=state.progress[id]; if(!p) return 'new'; if(p.streak>=2) return 'known'; if(p.wrong>0||p.streak>0) return 'learning'; return 'new'; }
+function mark(id,correct){
+  const p=state.progress[id]||{correct:0,wrong:0,streak:0};
+  if(correct){p.correct++;p.streak++;} else {p.wrong++;p.streak=0;}
+  p.last=Date.now(); state.progress[id]=p; Store.set('progress',state.progress);
+}
+
+async function init(){
+  let t=await Store.get('terms');
+  if(!t||!t.length){ t=seedTerms(); await Store.set('terms',t); }
+  state.terms=t;
+  state.resources=await Store.get('resources')||[];
+  state.progress=await Store.get('progress')||{};
+  render();
+}
+
+/* ============================== helpers for grouping ============================== */
+function groupsFor(cat){
+  const seen=new Set(); const ordered=[];
+  GROUP_ORDER.filter(([c])=>c===cat).forEach(([,g])=>{ if(state.terms.some(t=>t.category===cat&&t.group===g)){seen.add(g);ordered.push(g);} });
+  state.terms.filter(t=>t.category===cat).forEach(t=>{ if(!seen.has(t.group)){seen.add(t.group);ordered.push(t.group);} });
+  return ordered;
+}
+function categories(){
+  const seen=new Set(); const out=[];
+  GROUP_ORDER.forEach(([c])=>{ if(!seen.has(c)&&state.terms.some(t=>t.category===c)){seen.add(c);out.push(c);} });
+  state.terms.forEach(t=>{ if(!seen.has(t.category)){seen.add(t.category);out.push(t.category);} });
+  return out;
+}
+function termsInScope(){
+  let arr=state.terms;
+  if(state.scope!=='all'){ const [c,g]=state.scope.split('||'); arr=arr.filter(t=>t.category===c&&(g==='*'||t.group===g)); }
+  if(state.query){ const q=state.query.toLowerCase(); arr=arr.filter(t=>(t.term+' '+t.def).toLowerCase().includes(q)); }
+  return arr;
+}
+
+/* ============================== render: shell ============================== */
+function render(){
+  $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.view===state.view));
+  const m=$('#main');
+  if(state.view==='library') m.innerHTML=viewLibrary();
+  else if(state.view==='study') m.innerHTML=viewStudy();
+  else if(state.view==='quiz') m.innerHTML=viewQuiz();
+  else if(state.view==='compare') m.innerHTML=viewCompare();
+  else if(state.view==='resources') m.innerHTML=viewResources();
+  wire();
+}
+
+/* ============================== view: library ============================== */
+function viewLibrary(){
+  const cats=categories();
+  let idx=`<button class="all ${state.scope==='all'?'on':''}" data-scope="all">All terms <span style="font-family:var(--mono);font-size:11px;float:right;opacity:.7">${state.terms.length}</span></button>`;
+  let n=0;
+  cats.forEach(cat=>{
+    n++;
+    idx+=`<div class="cat"><button class="cathead" data-scope="${esc(cat)}||*"><span class="num">${String(n).padStart(2,'0')}</span>${esc(cat)}</button>`;
+    groupsFor(cat).forEach(g=>{
+      const ct=state.terms.filter(t=>t.category===cat&&t.group===g).length;
+      const sc=cat+'||'+g;
+      idx+=`<button class="grp ${state.scope===sc?'on':''}" data-scope="${esc(sc)}">${esc(g)}<span class="ct">${ct}</span></button>`;
+    });
+    idx+=`</div>`;
+  });
+
+  const arr=termsInScope();
+  let title='All terms', eyebrow='Library', desc='Your full corpus. Browse by concept on the left, or search up top.';
+  if(state.scope!=='all'){ const [c,g]=state.scope.split('||'); eyebrow=c; title=g==='*'?c:g; desc=g==='*'?'Every concept group in '+c+'.':''; }
+  if(state.query){ eyebrow='Search'; title='“'+state.query+'”'; desc=arr.length+' match'+(arr.length===1?'':'es')+'.'; }
+
+  let cards=arr.map(t=>termCard(t)).join('');
+  if(!arr.length) cards=`<div class="empty"><div class="big">Nothing here yet</div>${state.query?'No terms match your search.':'Add your first term to this group.'}</div>`;
+
+  return `
+  <div class="lib">
+    <aside class="index" id="indexPanel">
+      <h4>Concept map</h4>
+      ${idx}
+    </aside>
+    <section class="panel">
+      <div class="panelhead">
+        <div>
+          <div class="eyebrow">${esc(eyebrow)}</div>
+          <h2>${esc(title)}</h2>
+          ${desc?`<p>${esc(desc)}</p>`:''}
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn ghost sm menubtn" id="menuToggle">☰ Map</button>
+          <button class="btn sm" id="addTerm">+ Add term</button>
+        </div>
+      </div>
+      <div class="terms">${cards}</div>
+    </section>
+  </div>`;
+}
+function termCard(t){
+  const st=pstatus(t.id);
+  return `<article class="term collapsed" data-id="${esc(t.id)}">
+    <div class="tline">
+      <h3>${esc(t.term)}</h3>
+      <div class="meta"><span class="grouptag">${esc(t.group)}</span><span class="dot ${st}" title="${st}"></span></div>
+    </div>
+    <p class="def">${esc(t.def)}</p>
+    <div class="acts">
+      <button class="btn ghost sm" data-act="edit" data-id="${esc(t.id)}">Edit</button>
+      <button class="btn ghost sm" data-act="del" data-id="${esc(t.id)}"><span class="danger">Delete</span></button>
+    </div>
+  </article>`;
+}
+
+/* ============================== view: study (flashcards) ============================== */
+let deck={cards:[],i:0,flipped:false};
+function buildScopeOptions(sel){
+  let o=`<option value="all">All terms (${state.terms.length})</option>`;
+  categories().forEach(cat=>{
+    o+=`<option value="${esc(cat)}||*">${esc(cat)} — all</option>`;
+    groupsFor(cat).forEach(g=>{
+      const ct=state.terms.filter(t=>t.category===cat&&t.group===g).length;
+      o+=`<option value="${esc(cat)}||${esc(g)}" ${sel===cat+'||'+g?'selected':''}>&nbsp;&nbsp;${esc(g)} (${ct})</option>`;
+    });
+  });
+  return o;
+}
+function scopeTerms(scope){
+  if(scope==='all') return state.terms;
+  const [c,g]=scope.split('||'); return state.terms.filter(t=>t.category===c&&(g==='*'||t.group===g));
+}
+function viewStudy(){
+  if(!deck.cards.length){ deck.cards=shuffle(scopeTerms(state.scope)); deck.i=0; deck.flipped=false; }
+  const total=deck.cards.length;
+  if(!total) return `<div class="quizwrap"><div class="card"><div class="scopebar"><label>Deck</label><select id="deckScope">${buildScopeOptions(state.scope)}</select></div><div class="empty"><div class="big">No cards</div>This group is empty.</div></div></div>`;
+  const c=deck.cards[deck.i];
+  const pct=Math.round(((deck.i)/total)*100);
+  return `
+  <div class="flashwrap">
+    <div class="scopebar">
+      <label>Deck</label>
+      <select id="deckScope">${buildScopeOptions(state.scope)}</select>
+      <button class="btn ghost sm" id="reshuffle">↻ Shuffle</button>
+    </div>
+    <div class="deckmeta">Card ${deck.i+1} of ${total}</div>
+    <div class="progbar"><i style="width:${pct}%"></i></div>
+    <div class="flash ${deck.flipped?'flip':''}" id="flash">
+      <div class="flashinner">
+        <div class="face front">
+          <div class="lab">Term</div>
+          <h2>${esc(c.term)}</h2>
+          <div class="grouptag">${esc(c.category)} · ${esc(c.group)}</div>
+          <div class="hint">Click to reveal definition</div>
+        </div>
+        <div class="face back">
+          <div class="lab">Definition</div>
+          <div class="bk-term">${esc(c.term)}</div>
+          <div class="bk-def">${esc(c.def)}</div>
+        </div>
+      </div>
+    </div>
+    <div class="deckctrl">
+      <button class="btn ghost sm" id="prevCard">← Prev</button>
+      <div class="mid">
+        <button class="btn ghost sm" id="reviewAgain" style="border-color:var(--warn);color:var(--warn)">Review again</button>
+        <button class="btn sm" id="gotIt" style="background:var(--accent)">Knew it ✓</button>
+      </div>
+      <button class="btn ghost sm" id="nextCard">Next →</button>
+    </div>
+  </div>`;
+}
+
+/* ============================== view: quiz ============================== */
+let quiz=null;
+function viewQuiz(){
+  if(!quiz){
+    return `<div class="quizwrap"><div class="card">
+      <div class="panelhead" style="margin-bottom:18px"><div><div class="eyebrow">Quiz</div><h2>Test yourself</h2><p>Pick a scope and format. Misses get flagged for review.</p></div></div>
+      <div class="field"><label>Scope</label><select id="qScope">${buildScopeOptions(state.scope)}</select></div>
+      <div class="row2">
+        <div class="field"><label>Format</label><select id="qMode">
+          <option value="mc-term">Multiple choice — name the term</option>
+          <option value="mc-def">Multiple choice — pick the definition</option>
+          <option value="type">Type the term</option>
+        </select></div>
+        <div class="field"><label>Length</label><select id="qLen">
+          <option value="10">10 questions</option><option value="20">20 questions</option><option value="0">All</option>
+        </select></div>
+      </div>
+      <button class="btn" id="startQuiz" style="width:100%;justify-content:center">Start quiz</button>
+    </div></div>`;
+  }
+  if(quiz.done) return quizResults();
+  const q=quiz.items[quiz.i];
+  const head=`<div class="scoreline"><span>Question ${quiz.i+1} / ${quiz.items.length}</span><span>Score ${quiz.score}</span></div>
+    <div class="progbar"><i style="width:${Math.round(quiz.i/quiz.items.length*100)}%"></i></div>`;
+
+  if(quiz.mode==='type'){
+    const answered=quiz.answered;
+    return `<div class="quizwrap"><div class="card">${head}
+      <div class="q-prompt">Name the term</div>
+      <div class="q-body">${esc(q.def)}</div>
+      <div class="typed"><input id="typeAns" placeholder="Type the term…" ${answered?'disabled':''} value="${answered?esc(quiz.typed||''):''}"><button class="btn" id="typeSubmit" ${answered?'disabled':''}>Check</button></div>
+      ${answered?`<div class="reveal"><div class="r-term">${esc(q.term)}</div><div class="r-def">${esc(q.def)}</div>
+        <div class="grade"><button class="btn ghost sm" id="markWrong" style="border-color:var(--warn);color:var(--warn)">I got it wrong</button><button class="btn sm" id="markRight" style="background:var(--accent)">I was right</button></div></div>`:''}
+    </div></div>`;
+  }
+
+  // multiple choice
+  const showDef = quiz.mode==='mc-term';
+  const prompt = showDef? 'Which term matches this definition?' : 'Which definition matches this term?';
+  const body = showDef? `<div class="q-body">${esc(q.def)}</div>` : `<div class="q-body term">${esc(q.term)}</div>`;
+  const opts=q.options.map((o,k)=>{
+    let cls='opt';
+    if(quiz.answered){ if(o.correct) cls+=' correct'; else if(k===quiz.picked) cls+=' wrong'; }
+    const label = showDef? o.term : o.def;
+    return `<button class="${cls}" data-opt="${k}" ${quiz.answered?'disabled':''}>${esc(label)}</button>`;
+  }).join('');
+  return `<div class="quizwrap"><div class="card">${head}
+    <div class="q-prompt">${prompt}</div>${body}
+    <div class="opts">${opts}</div>
+    ${quiz.answered?`<button class="btn" id="nextQ" style="width:100%;justify-content:center;margin-top:18px">${quiz.i+1<quiz.items.length?'Next question →':'See results'}</button>`:''}
+  </div></div>`;
+}
+function quizResults(){
+  const pct=Math.round(quiz.score/quiz.items.length*100);
+  const miss=quiz.items.filter(it=>it.missed);
+  let ml='';
+  if(miss.length){ ml=`<div class="misslist"><h4>Review these (${miss.length})</h4>`+miss.map(it=>`<div class="missitem"><b>${esc(it.term)}</b><div style="font-size:13px;color:var(--muted);margin-top:4px">${esc(it.def)}</div></div>`).join('')+`</div>`; }
+  return `<div class="quizwrap"><div class="card results">
+    <div class="score">${pct}%</div>
+    <div class="sub">${quiz.score} of ${quiz.items.length} correct</div>
+    <div style="margin-top:20px;display:flex;gap:8px;justify-content:center">
+      ${miss.length?`<button class="btn" id="retryMiss" style="background:var(--warn)">Retry missed (${miss.length})</button>`:''}
+      <button class="btn ghost" id="quizAgain">New quiz</button>
+    </div>
+    ${ml}
+  </div></div>`;
+}
+function buildQuiz(scope,mode,len,pool){
+  let terms = pool || scopeTerms(scope);
+  terms = shuffle(terms);
+  if(len>0) terms=terms.slice(0,len);
+  const all=state.terms;
+  const items=terms.map(t=>{
+    const item={id:t.id,term:t.term,def:t.def,missed:false};
+    if(mode!=='type'){
+      const distract=shuffle(all.filter(x=>x.id!==t.id && x.category===t.category));
+      let pool3=distract.slice(0,3);
+      if(pool3.length<3) pool3=pool3.concat(shuffle(all.filter(x=>x.id!==t.id)).slice(0,3-pool3.length));
+      item.options=shuffle([{term:t.term,def:t.def,correct:true},...pool3.map(d=>({term:d.term,def:d.def,correct:false}))]);
+    }
+    return item;
+  });
+  return {scope,mode,len,items,i:0,score:0,answered:false,picked:-1,typed:'',done:false};
+}
+
+/* ============================== view: compare ============================== */
+let cmp={ids:[]};
+function viewCompare(){
+  const chips=cmp.ids.map(id=>{const t=state.terms.find(x=>x.id===id);return t?`<span class="chip">${esc(t.term)}<button data-rm="${esc(id)}">×</button></span>`:'';}).join('');
+  let grid='';
+  if(cmp.ids.length){
+    grid=`<div class="cmp-grid">`+cmp.ids.map(id=>{
+      const t=state.terms.find(x=>x.id===id); if(!t)return'';
+      return `<div class="cmp-col card"><div class="grouptag">${esc(t.category)} · ${esc(t.group)}</div><h3>${esc(t.term)}</h3><div class="def">${esc(t.def)}</div></div>`;
+    }).join('')+`</div>`;
+    // related: same group, not already picked
+    const base=state.terms.find(x=>x.id===cmp.ids[cmp.ids.length-1]);
+    if(base){
+      const rel=state.terms.filter(t=>t.group===base.group&&!cmp.ids.includes(t.id)).slice(0,8);
+      if(rel.length) grid+=`<div class="related"><h4>Related in ${esc(base.group)}</h4>`+rel.map(t=>`<button class="r" data-add="${esc(t.id)}">${esc(t.term)}</button>`).join('')+`</div>`;
+    }
+  } else {
+    grid=`<div class="empty"><div class="big">Compare two definitions side by side</div>Search and pick terms below — useful for sister concepts like American vs. European waterfall, or DPI vs. TVPI.</div>`;
+  }
+  return `<div>
+    <div class="panelhead"><div><div class="eyebrow">Compare</div><h2>Side by side</h2><p>Add 2–3 terms to see their definitions together and surface related concepts.</p></div></div>
+    <div class="cmp-pick">${chips}
+      <div class="search" style="flex:1 1 220px;max-width:340px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="cmpSearch" placeholder="Add a term…" autocomplete="off"></div>
+    </div>
+    <div id="cmpResults"></div>
+    ${grid}
+  </div>`;
+}
+
+/* ============================== view: resources ============================== */
+function viewResources(){
+  let list=state.resources.map(r=>{
+    const host=(()=>{try{return new URL(r.url).hostname.replace('www.','')}catch(e){return''}})();
+    return `<div class="resitem" data-id="${esc(r.id)}">
+      <div style="min-width:0">
+        <h3>${r.url?`<a class="tt" href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title)}</a>`:esc(r.title)}</h3>
+        ${r.url?`<div class="src">${esc(host||r.url)}</div>`:''}
+        ${r.note?`<div class="note">${esc(r.note)}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:0 0 auto">
+        ${r.cat?`<span class="tag">${esc(r.cat)}</span>`:''}
+        <button class="btn ghost sm" data-resdel="${esc(r.id)}"><span class="danger">Remove</span></button>
+      </div>
+    </div>`;
+  }).join('');
+  if(!state.resources.length) list=`<div class="empty"><div class="big">No saved resources yet</div>Save articles, primers, and explainers you want to come back to. Add a title, a link, and a note on why it mattered.</div>`;
+  return `<div>
+    <div class="panelhead">
+      <div><div class="eyebrow">Resources</div><h2>Reading shelf</h2><p>The articles and explainers worth returning to — tagged and searchable alongside your terms.</p></div>
+      <button class="btn sm" id="addRes">+ Add resource</button>
+    </div>
+    <div class="res">${list}</div>
+  </div>`;
+}
+
+/* ============================== modals ============================== */
+function openTermModal(id){
+  const t=id?state.terms.find(x=>x.id===id):null;
+  const cats=categories();
+  const catOpts=cats.map(c=>`<option ${t&&t.category===c?'selected':''}>${esc(c)}</option>`).join('')+`<option value="__new">+ New category…</option>`;
+  const curCat=t?t.category:cats[0];
+  const grpOpts=groupsFor(curCat).map(g=>`<option ${t&&t.group===g?'selected':''}>${esc(g)}</option>`).join('')+`<option value="__new">+ New group…</option>`;
+  $('#modalRoot').innerHTML=`<div class="scrim" id="scrim"><div class="modal">
+    <h3>${t?'Edit term':'Add a term'}</h3>
+    <div class="field"><label>Term</label><input id="fTerm" value="${t?esc(t.term):''}" placeholder="e.g. Carried interest"></div>
+    <div class="field"><label>Definition</label><textarea id="fDef" placeholder="Go deep — why it exists, how it works, why professionals care.">${t?esc(t.def):''}</textarea></div>
+    <div class="row2">
+      <div class="field"><label>Category</label><select id="fCat">${catOpts}</select><input id="fCatNew" placeholder="New category" style="display:none;margin-top:8px"></div>
+      <div class="field"><label>Group</label><select id="fGrp">${grpOpts}</select><input id="fGrpNew" placeholder="New group" style="display:none;margin-top:8px"></div>
+    </div>
+    <div class="modalacts">
+      <button class="btn ghost" id="cancelModal">Cancel</button>
+      <button class="btn" id="saveTermBtn">${t?'Save changes':'Add term'}</button>
+    </div>
+  </div></div>`;
+  const fCat=$('#fCat'),fGrp=$('#fGrp');
+  fCat.value=curCat;
+  const refreshGroups=()=>{ const c=fCat.value==='__new'?'':fCat.value; const gs=c?groupsFor(c):[]; fGrp.innerHTML=gs.map(g=>`<option>${esc(g)}</option>`).join('')+`<option value="__new">+ New group…</option>`; toggleNew(); };
+  const toggleNew=()=>{ $('#fCatNew').style.display=fCat.value==='__new'?'block':'none'; $('#fGrpNew').style.display=fGrp.value==='__new'?'block':'none'; };
+  fCat.onchange=refreshGroups; fGrp.onchange=toggleNew; toggleNew();
+  $('#cancelModal').onclick=closeModal; $('#scrim').onclick=e=>{if(e.target.id==='scrim')closeModal();};
+  $('#saveTermBtn').onclick=()=>{
+    const term=$('#fTerm').value.trim(); const def=$('#fDef').value.trim();
+    if(!term||!def){ toast('Term and definition required'); return; }
+    let cat=fCat.value==='__new'?$('#fCatNew').value.trim():fCat.value;
+    let grp=fGrp.value==='__new'?$('#fGrpNew').value.trim():fGrp.value;
+    if(!cat)cat='Uncategorized'; if(!grp)grp='General';
+    if(t){ Object.assign(t,{term,def,category:cat,group:grp}); toast('Updated'); }
+    else { const nid=slug(term)+'-'+Math.random().toString(36).slice(2,5); state.terms.push({id:nid,term,def,category:cat,group:grp}); toast('Added'); }
+    Store.set('terms',state.terms); closeModal(); deck.cards=[]; render();
+  };
+}
+function openResModal(){
+  const cats=categories();
+  $('#modalRoot').innerHTML=`<div class="scrim" id="scrim"><div class="modal">
+    <h3>Add a resource</h3>
+    <div class="field"><label>Title</label><input id="rTitle" placeholder="Article or primer title"></div>
+    <div class="field"><label>Link (optional)</label><input id="rUrl" placeholder="https://…"></div>
+    <div class="field"><label>Why it matters (optional)</label><textarea id="rNote" placeholder="A line on what it taught you or why you saved it."></textarea></div>
+    <div class="field"><label>Tag (optional)</label><select id="rCat"><option value="">None</option>${cats.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div>
+    <div class="modalacts"><button class="btn ghost" id="cancelModal">Cancel</button><button class="btn" id="saveResBtn">Add resource</button></div>
+  </div></div>`;
+  $('#cancelModal').onclick=closeModal; $('#scrim').onclick=e=>{if(e.target.id==='scrim')closeModal();};
+  $('#saveResBtn').onclick=()=>{
+    const title=$('#rTitle').value.trim(); if(!title){toast('Title required');return;}
+    let url=$('#rUrl').value.trim(); if(url&&!/^https?:\/\//i.test(url))url='https://'+url;
+    state.resources.unshift({id:uid(),title,url,note:$('#rNote').value.trim(),cat:$('#rCat').value});
+    Store.set('resources',state.resources); toast('Saved'); closeModal(); render();
+  };
+}
+function closeModal(){ $('#modalRoot').innerHTML=''; }
+
+/* ============================== wiring ============================== */
+function wire(){
+  // library
+  $$('[data-scope]').forEach(b=>b.onclick=()=>{ state.scope=b.dataset.scope; state.query=''; $('#globalSearch').value=''; render(); });
+  const mt=$('#menuToggle'); if(mt)mt.onclick=()=>$('#indexPanel').classList.toggle('show');
+  const at=$('#addTerm'); if(at)at.onclick=()=>openTermModal();
+  $$('.term').forEach(card=>{
+    card.onclick=e=>{ if(e.target.closest('[data-act]'))return; card.classList.toggle('open'); card.classList.toggle('collapsed'); };
+  });
+  $$('[data-act]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const id=b.dataset.id;
+    if(b.dataset.act==='edit')openTermModal(id);
+    else if(b.dataset.act==='del'){ if(confirm('Delete this term?')){ state.terms=state.terms.filter(t=>t.id!==id); Store.set('terms',state.terms); deck.cards=[]; render(); toast('Deleted'); } }
+  });
+
+  // study
+  const ds=$('#deckScope'); if(ds)ds.onchange=()=>{ state.scope=ds.value; deck.cards=shuffle(scopeTerms(ds.value)); deck.i=0; deck.flipped=false; render(); };
+  const rs=$('#reshuffle'); if(rs)rs.onclick=()=>{ deck.cards=shuffle(deck.cards); deck.i=0; deck.flipped=false; render(); };
+  const fl=$('#flash'); if(fl)fl.onclick=()=>{ deck.flipped=!deck.flipped; fl.classList.toggle('flip'); };
+  const nc=$('#nextCard'); if(nc)nc.onclick=()=>{ deck.i=(deck.i+1)%deck.cards.length; deck.flipped=false; render(); };
+  const pc=$('#prevCard'); if(pc)pc.onclick=()=>{ deck.i=(deck.i-1+deck.cards.length)%deck.cards.length; deck.flipped=false; render(); };
+  const gi=$('#gotIt'); if(gi)gi.onclick=()=>{ mark(deck.cards[deck.i].id,true); advanceDeck(); };
+  const ra=$('#reviewAgain'); if(ra)ra.onclick=()=>{ mark(deck.cards[deck.i].id,false); advanceDeck(); };
+
+  // quiz setup
+  const sq=$('#startQuiz'); if(sq)sq.onclick=()=>{ quiz=buildQuiz($('#qScope').value,$('#qMode').value,parseInt($('#qLen').value,10)); render(); };
+  $$('.opt[data-opt]').forEach(b=>b.onclick=()=>answerMC(parseInt(b.dataset.opt,10)));
+  const nq=$('#nextQ'); if(nq)nq.onclick=nextQ;
+  const ts=$('#typeSubmit'); if(ts)ts.onclick=submitType;
+  const ti=$('#typeAns'); if(ti)ti.onkeydown=e=>{if(e.key==='Enter')submitType();};
+  const mr=$('#markRight'); if(mr)mr.onclick=()=>gradeType(true);
+  const mw=$('#markWrong'); if(mw)mw.onclick=()=>gradeType(false);
+  const qa=$('#quizAgain'); if(qa)qa.onclick=()=>{ quiz=null; render(); };
+  const rm=$('#retryMiss'); if(rm)rm.onclick=()=>{ const miss=quiz.items.filter(it=>it.missed).map(it=>state.terms.find(t=>t.id===it.id)).filter(Boolean); quiz=buildQuiz(quiz.scope,quiz.mode,0,miss); render(); };
+
+  // compare
+  const cs=$('#cmpSearch'); if(cs)cs.oninput=()=>renderCmpResults(cs.value);
+  $$('[data-rm]').forEach(b=>b.onclick=()=>{ cmp.ids=cmp.ids.filter(x=>x!==b.dataset.rm); render(); });
+  $$('[data-add]').forEach(b=>b.onclick=()=>{ if(!cmp.ids.includes(b.dataset.add)&&cmp.ids.length<3)cmp.ids.push(b.dataset.add); render(); });
+
+  // resources
+  const ar=$('#addRes'); if(ar)ar.onclick=openResModal;
+  $$('[data-resdel]').forEach(b=>b.onclick=()=>{ state.resources=state.resources.filter(r=>r.id!==b.dataset.resdel); Store.set('resources',state.resources); render(); toast('Removed'); });
+}
+function advanceDeck(){ if(deck.i+1<deck.cards.length){deck.i++;deck.flipped=false;render();} else {deck.cards=[];state.view='quiz';quiz=null;render();toast('Deck complete — quiz yourself?');} }
+
+function answerMC(k){
+  const q=quiz.items[quiz.i]; if(quiz.answered)return;
+  quiz.answered=true; quiz.picked=k;
+  const correct=q.options[k].correct;
+  if(correct)quiz.score++; else q.missed=true;
+  mark(q.id,correct); render();
+}
+function nextQ(){ if(quiz.i+1<quiz.items.length){quiz.i++;quiz.answered=false;quiz.picked=-1;quiz.typed='';render();} else {quiz.done=true;render();} }
+function submitType(){
+  const v=$('#typeAns').value.trim(); const q=quiz.items[quiz.i];
+  quiz.typed=v; quiz.answered=true;
+  const a=norm(v), b=norm(q.term);
+  // accept exact, contained, or parenthetical alias
+  const alias=(q.term.match(/\(([^)]+)\)/)||[])[1];
+  const auto = a&&(a===b || (a.length>3&&(b.includes(a)||a.includes(b))) || (alias&&norm(alias)===a));
+  if(auto){ quiz.score++; mark(q.id,true); }
+  else { q.missed=true; mark(q.id,false); }
+  quiz.autograded=auto; render();
+}
+function gradeType(right){
+  const q=quiz.items[quiz.i];
+  // adjust if user overrides autograde
+  if(right&&q.missed){ q.missed=false; quiz.score++; mark(q.id,true); }
+  else if(!right&&!q.missed){ q.missed=true; quiz.score=Math.max(0,quiz.score-1); mark(q.id,false); }
+  nextQ();
+}
+
+function renderCmpResults(qstr){
+  const box=$('#cmpResults'); if(!box)return;
+  const q=qstr.trim().toLowerCase();
+  if(!q){box.innerHTML='';return;}
+  const hits=state.terms.filter(t=>!cmp.ids.includes(t.id)&&(t.term+' '+t.def).toLowerCase().includes(q)).slice(0,8);
+  box.innerHTML=`<div class="terms" style="margin-bottom:18px">`+hits.map(t=>`<article class="term collapsed" style="cursor:pointer" data-pick="${esc(t.id)}"><div class="tline"><h3 style="font-size:16px">${esc(t.term)}</h3><span class="grouptag">${esc(t.group)}</span></div></article>`).join('')+`</div>`;
+  $$('[data-pick]').forEach(b=>b.onclick=()=>{ if(cmp.ids.length<3)cmp.ids.push(b.dataset.pick); render(); });
+}
+
+/* tabs + search */
+$$('#tabs button').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; if(state.view==='study')deck.cards=[]; if(state.view==='quiz')quiz=null; render(); });
+$('#globalSearch').addEventListener('input',e=>{ state.query=e.target.value; if(state.view!=='library'){state.view='library';} state.scope='all'; render(); $('#globalSearch').focus(); const v=e.target.value; const inp=$('#globalSearch'); inp.value=v; inp.setSelectionRange(v.length,v.length); });
+
+init();
+</script>
