@@ -189,10 +189,11 @@
   .term:hover{border-color:var(--faint);box-shadow:var(--shadow)}
   .term:active{transform:scale(.995)}
   .term .tline{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-  .term h3{font-family:var(--serif);font-weight:600;font-size:19px;margin:0;letter-spacing:-.01em}
-  .term .meta{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+  .term h3{font-family:var(--serif);font-weight:600;font-size:19px;margin:0;letter-spacing:-.01em;
+    min-width:0;overflow-wrap:break-word}
+  .term .meta{display:flex;align-items:center;gap:7px;margin-top:4px;min-width:0;max-width:100%}
   .term .grouptag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--faint);
-    text-transform:uppercase}
+    text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--line);flex:0 0 auto}
   .dot.learning{background:var(--warn)}
   .dot.known{background:var(--accent)}
@@ -204,6 +205,54 @@
   .term.open{cursor:default}
   .empty{text-align:center;padding:60px 20px;color:var(--faint)}
   .empty .big{font-family:var(--serif);font-size:21px;color:var(--muted);margin-bottom:6px}
+
+  /* ---- mastery map (heatmap library) ---- */
+  .mapsec{margin-bottom:24px}
+  .mapsechead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 10px}
+  .mapsechead h3{font-family:var(--serif);font-weight:600;font-size:19px;margin:0;letter-spacing:-.01em}
+  .mapsechead .ct{font-family:var(--mono);font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .mapgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px}
+  .maptile{position:relative;border:1px solid var(--line);border-radius:14px;padding:12px 13px 11px;
+    background:var(--paper);text-align:left;min-height:92px;display:flex;flex-direction:column;
+    justify-content:space-between;gap:8px;transition:transform .12s,border-color .15s;overflow:hidden;
+    user-select:none;-webkit-user-select:none}
+  .maptile:hover{border-color:var(--faint)}
+  .maptile:active{transform:scale(.97)}
+  .maptile .tname{font-weight:600;font-size:13px;line-height:1.3;color:var(--ink)}
+  .maptile .tstats{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--mono);font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .maptile .tbar{height:4px;border-radius:3px;background:var(--line2);overflow:hidden}
+  .maptile .tbar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+  @media(max-width:780px){
+    .mapgrid{grid-template-columns:repeat(2,1fr)}
+  }
+
+  /* ---- deep dive sheet ---- */
+  .modal.dd{max-width:640px}
+  .modal.dd .grouptag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--faint)}
+  .ddbody{font-size:14.5px;line-height:1.66;color:var(--body-ink);margin-top:6px}
+  .ddbody h4{font-family:var(--serif);font-size:16.5px;font-weight:600;color:var(--ink);
+    margin:18px 0 6px;letter-spacing:-.01em}
+  .ddbody p{margin:0 0 10px}
+  .ddbody ul{margin:0 0 10px;padding-left:20px}
+  .ddbody li{margin-bottom:4px}
+  .ddbody strong{color:var(--ink)}
+  .ddchat{margin-top:18px;border-top:1px solid var(--line2);padding-top:14px}
+  .ddchat h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--faint);margin:0 0 10px}
+  .ddmsg{margin-bottom:10px;font-size:14px;line-height:1.58}
+  .ddmsg.user{background:var(--accent-soft);border-radius:13px;padding:9px 13px;margin-left:14%;
+    color:var(--ink)}
+  .ddmsg.ai{color:var(--body-ink)}
+  .ddask{display:flex;gap:8px;margin-top:12px}
+  .ddask input{flex:1;min-width:0;padding:11px 13px;border:1px solid var(--line);border-radius:12px;
+    outline:none;background:var(--paper)}
+  .ddask input:focus{border-color:var(--accent)}
+  .ddnote{font-size:12px;color:var(--faint);line-height:1.5;margin-top:10px}
+  .ddwait{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--accent);
+    animation:ddpulse 1.2s ease-in-out infinite}
+  @keyframes ddpulse{0%,100%{opacity:.35}50%{opacity:1}}
 
   /* ---- generic card panel ---- */
   .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
@@ -364,10 +413,18 @@
     .term{padding:16px;border-radius:15px}
     .term h3{font-size:18px}
     .term .def{font-size:14.5px}
-    .flash{height:min(56vh,430px)}
-    .face{padding:26px 22px}
-    .face.front h2{font-size:27px}
-    .face.back .bk-def{font-size:15px}
+    .flash{height:clamp(230px,36vh,320px);margin:6px 0 12px}
+    .face{padding:22px 20px}
+    .face.front h2{font-size:23px}
+    .face .lab{top:14px}
+    .flash .hint{bottom:12px}
+    .face.back .bk-term{font-size:16px;margin:2px 0 8px}
+    .face.back .bk-core{font-size:15px}
+    .face.back .bk-def{font-size:14.5px}
+    .modebar{margin-bottom:10px}
+    .deckmeta{margin-bottom:4px}
+    .gradebtns{position:sticky;bottom:calc(88px + env(safe-area-inset-bottom));z-index:5;margin-top:10px}
+    .gradebtns .btn{box-shadow:0 4px 18px rgba(0,0,0,.28)}
     .deckctrl .mid{display:none}
     .savenote{bottom:calc(86px + env(safe-area-inset-bottom))}
     .scrim{align-items:flex-end;padding:0}
@@ -1040,7 +1097,7 @@ const SEED=[
 ];
 
 /* ============================== state ============================== */
-let state={ terms:[], resources:[], progress:{}, view:'library', scope:'all', query:'' };
+let state={ terms:[], resources:[], progress:{}, view:'library', scope:'all', query:'', libList:false };
 
 function seedTerms(){
   return SEED.map(s=>({ id:slug(s.t)||uid(), term:s.t, def:s.d, q:s.q||'', category:s.c, group:s.g, sg:s.sg||s.g }));
@@ -1109,7 +1166,7 @@ function leeches(){
     .sort((a,b)=>(state.progress[b.id].lapses||0)-(state.progress[a.id].lapses||0));
 }
 function coreOf(def){
-  const m=(def||'').match(/^[^.!?]*[.!?]/);
+  const m=(def||'').match(/^[^.!?]*[.!?]["'”’)]*/);
   if(!m) return {core:def,rest:''};
   return {core:m[0], rest:def.slice(m[0].length).trim()};
 }
@@ -1136,6 +1193,7 @@ async function init(){
   await migrateSeed();
   state.resources=await Store.get('resources')||[];
   state.progress=await Store.get('progress')||{};
+  ddCache=await Store.get('deepdives')||{};
   render();
 }
 
@@ -1213,6 +1271,57 @@ function viewLibrary(){
   if(state.query){ eyebrow='Search'; title='“'+state.query+'”'; desc=arr.length+' match'+(arr.length===1?'':'es')+'.'; }
   const schemaQ=SCHEMA[state.scope!=='all'&&state.scope.split('||')[1]!=='*'?state.scope.split('||')[1]:''];
 
+  /* mastery map — the default home view */
+  const mapMode = state.scope==='all' && !state.query && !state.libList;
+  let body='';
+  if(mapMode){
+    const kn=state.terms.filter(t=>pstatus(t.id)==='known').length;
+    body=cats.map(cat=>{
+      const catTerms=state.terms.filter(t=>t.category===cat);
+      const tiles=groupsFor(cat).map(g=>{
+        const list=catTerms.filter(t=>t.group===g);
+        let k=0,l=0;
+        list.forEach(t=>{const s=pstatus(t.id); if(s==='known')k++; else if(s==='learning')l++;});
+        const pct=list.length?(k+l*0.5)/list.length:0;
+        const tint=Math.round(pct*38);
+        return `<button class="maptile" data-scope="${esc(cat)}||${esc(g)}"
+          style="background:color-mix(in srgb, var(--accent) ${tint}%, var(--paper))">
+          <span class="tname">${esc(g)}</span>
+          <span>
+            <span class="tstats"><span>${list.length} terms</span><span>${Math.round(pct*100)}%</span></span>
+            <span class="tbar"><i style="width:${Math.max(2,Math.round(pct*100))}%"></i></span>
+          </span>
+        </button>`;
+      }).join('');
+      return `<div class="mapsec">
+        <div class="mapsechead"><h3>${esc(cat)}</h3><span class="ct">${catTerms.length} terms</span></div>
+        <div class="mapgrid">${tiles}</div>
+      </div>`;
+    }).join('');
+    return `
+    ${rail}
+    <div class="lib">
+      <aside class="index" id="indexPanel">
+        <h4>Concept map</h4>
+        ${idx}
+      </aside>
+      <section class="panel">
+        <div class="panelhead">
+          <div>
+            <div class="eyebrow">Library</div>
+            <h2>Mastery map</h2>
+            <p>${state.terms.length} terms · ${kn} known. Darker tiles are closer to mastered — tap one to open its terms.</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn ghost sm" id="libListBtn">List view</button>
+            <button class="btn sm" id="addTerm">+ Add term</button>
+          </div>
+        </div>
+        ${body}
+      </section>
+    </div>`;
+  }
+
   let cards=arr.map(t=>termCard(t)).join('');
   if(!arr.length) cards=`<div class="empty"><div class="big">Nothing here yet</div>${state.query?'No terms match your search.':'Add your first term to this group.'}</div>`;
 
@@ -1231,6 +1340,7 @@ function viewLibrary(){
           ${schemaQ?`<p class="schemaline" style="margin-top:6px">“${esc(schemaQ)}”</p>`:(desc?`<p>${esc(desc)}</p>`:'')}
         </div>
         <div style="display:flex;gap:8px">
+          ${state.scope==='all'&&!state.query?`<button class="btn ghost sm" id="libMapBtn">Map view</button>`:''}
           <button class="btn sm" id="addTerm">+ Add term</button>
         </div>
       </div>
@@ -1241,12 +1351,11 @@ function viewLibrary(){
 function termCard(t){
   const st=pstatus(t.id);
   return `<article class="term collapsed" data-id="${esc(t.id)}">
-    <div class="tline">
-      <h3>${esc(t.term)}</h3>
-      <div class="meta"><span class="grouptag">${esc(t.group)}</span><span class="dot ${st}" title="${st}"></span></div>
-    </div>
+    <h3>${esc(t.term)}</h3>
+    <div class="meta"><span class="dot ${st}" title="${st}"></span><span class="grouptag">${esc(t.group)}</span></div>
     <p class="def">${esc(t.def)}</p>
     <div class="acts">
+      <button class="btn sm" data-act="dd" data-id="${esc(t.id)}">✦ Deep dive</button>
       <button class="btn ghost sm" data-act="edit" data-id="${esc(t.id)}">Edit</button>
       <button class="btn ghost sm" data-act="del" data-id="${esc(t.id)}"><span class="danger">Delete</span></button>
     </div>
@@ -1333,6 +1442,7 @@ function viewReview(){
             <div class="bk-term">${esc(c.term)}</div>
             <div class="bk-core">${esc(cr.core)}</div>
             <div class="bk-def">${esc(cr.rest)}</div>
+            <button class="btn ghost sm" data-act="dd" data-id="${esc(c.id)}" style="margin-top:14px">✦ Deep dive</button>
           </div>
         </div>
       </div>
@@ -1377,6 +1487,7 @@ function viewBrowse(){
             <div class="bk-term">${esc(c.term)}</div>
             <div class="bk-core">${esc(cr.core)}</div>
             <div class="bk-def">${esc(cr.rest)}</div>
+            <button class="btn ghost sm" data-act="dd" data-id="${esc(c.id)}" style="margin-top:14px">✦ Deep dive</button>
           </div>
         </div>
       </div>
@@ -1435,20 +1546,28 @@ function viewQuiz(){
     const label = showDef? o.term : o.clue;
     return `<button class="${cls}" data-opt="${k}" ${quiz.answered?'disabled':''}>${esc(label)}</button>`;
   }).join('');
+  const reveal = quiz.answered
+    ? `<div class="reveal"><div class="r-term">${esc(q.term)}</div><div class="r-def">${esc(q.def)}</div></div>`
+    : '';
   return `<div class="quizwrap"><div class="card">${head}
     <div class="q-prompt">${prompt}</div>${body}
     <div class="opts">${opts}</div>
-    ${quiz.answered?`<button class="btn" id="nextQ" style="width:100%;justify-content:center;margin-top:18px">${quiz.i+1<quiz.items.length?'Next question →':'See results'}</button>`:''}
+    ${reveal}
+    ${quiz.answered?`<button class="btn" id="nextQ" style="width:100%;justify-content:center;margin-top:16px">${quiz.i+1<quiz.items.length?'Next question →':'See results'}</button>`:''}
   </div></div>`;
 }
 function quizResults(){
   const pct=Math.round(quiz.score/quiz.items.length*100);
   const miss=quiz.items.filter(it=>it.missed);
+  const verdict = pct>=90?'Fluent — this would survive a pitch meeting.'
+    : pct>=70?'Strong. The misses below are your edge.'
+    : pct>=50?'Getting there — drill the misses, then retake.'
+    : 'Early days. Send the misses through Daily review.';
   let ml='';
   if(miss.length){ ml=`<div class="misslist"><h4>Review these (${miss.length})</h4>`+miss.map(it=>`<div class="missitem"><b>${esc(it.term)}</b><div style="font-size:13px;color:var(--muted);margin-top:4px">${esc(it.def)}</div></div>`).join('')+`</div>`; }
   return `<div class="quizwrap"><div class="card results">
     <div class="score">${pct}%</div>
-    <div class="sub">${quiz.score} of ${quiz.items.length} correct</div>
+    <div class="sub">${quiz.score} of ${quiz.items.length} correct · ${verdict}</div>
     <div style="margin-top:20px;display:flex;gap:8px;justify-content:center">
       ${miss.length?`<button class="btn" id="retryMiss" style="background:var(--warn)">Retry missed (${miss.length})</button>`:''}
       <button class="btn ghost" id="quizAgain">New quiz</button>
@@ -1562,6 +1681,84 @@ const PAIRS=[
  {x:'Its cost scales directly with how many people use the product',k:'b'},
  {x:'The weights are frozen while it happens',k:'b'},
  {x:'Runs on specialized accelerators like GPUs',k:'both'}]},
+{a:'Duration',b:'Convexity',s:[
+ {x:'First-order price sensitivity to a change in rates',k:'a'},
+ {x:'Measures how that sensitivity itself changes as rates move',k:'b'},
+ {x:'Mortgage bonds famously carry the negative kind',k:'b'},
+ {x:'Longer-maturity bonds generally have more of it',k:'a'},
+ {x:'A concept from the mathematics of bond pricing',k:'both'}]},
+{a:'High watermark',b:'Hurdle rate / preferred return',s:[
+ {x:'Blocks fees on a recovery until investors are made whole after a loss',k:'a'},
+ {x:'A minimum return that must be cleared before any performance fee',k:'b'},
+ {x:'References the fund’s previous peak value',k:'a'},
+ {x:'Often set at roughly 7–9%, or relative to a benchmark',k:'b'},
+ {x:'Exists so the manager only gets paid when investors actually win',k:'both'}]},
+{a:'Enterprise Value (EV)',b:'Market capitalization',s:[
+ {x:'Includes the company’s debt and subtracts its cash',k:'a'},
+ {x:'Simply share price times shares outstanding',k:'b'},
+ {x:'The theoretical price to acquire the whole business',k:'a'},
+ {x:'Two companies can match on this while carrying wildly different debt loads',k:'b'},
+ {x:'Used as the numerator or base in valuation multiples',k:'both'}]},
+{a:'EBITDA',b:'Free cash flow (FCF)',s:[
+ {x:'Ignores capital expenditures entirely',k:'a'},
+ {x:'What owners could actually pocket after the business funds itself',k:'b'},
+ {x:'Buffett’s critique targets its treatment of depreciation as fake cost',k:'a'},
+ {x:'Calculated from the cash flow statement, not the income statement',k:'b'},
+ {x:'Used as a proxy for a company’s operating performance',k:'both'}]},
+{a:'Call option',b:'Put option',s:[
+ {x:'The right to buy at the strike price',k:'a'},
+ {x:'The right to sell at the strike price',k:'b'},
+ {x:'Functions as crash insurance on a portfolio',k:'b'},
+ {x:'The vehicle for leveraged bullish bets',k:'a'},
+ {x:'Loses time value every day it isn’t exercised',k:'both'}]},
+{a:'Futures contract',b:'Forward contract',s:[
+ {x:'Standardized and traded on an exchange with a clearinghouse',k:'a'},
+ {x:'Private, customized, and settled only at maturity',k:'b'},
+ {x:'Marked to market with cash settling every night',k:'a'},
+ {x:'Each side bears the other’s credit risk for the contract’s life',k:'b'},
+ {x:'An agreement today on a price for a future transaction',k:'both'}]},
+{a:'CPI',b:'PCE',s:[
+ {x:'The measure the Fed officially targets at 2%',k:'b'},
+ {x:'Drives headlines, Social Security adjustments, and TIPS',k:'a'},
+ {x:'Tracks a fixed basket of urban consumer purchases',k:'a'},
+ {x:'Updates its weights as consumer behavior shifts, and runs a few tenths cooler',k:'b'},
+ {x:'A monthly gauge of U.S. consumer price inflation',k:'both'}]},
+{a:'Sharpe ratio',b:'Sortino ratio',s:[
+ {x:'Penalizes upside and downside volatility equally',k:'a'},
+ {x:'Punishes only downside deviation',k:'b'},
+ {x:'Fairer to strategies with many small gains and rare large ones',k:'b'},
+ {x:'The default risk-adjusted metric everyone quotes first',k:'a'},
+ {x:'Divides excess return by a measure of risk',k:'both'}]},
+{a:'Moral hazard',b:'Adverse selection',s:[
+ {x:'Behavior gets riskier after protection is in place',k:'a'},
+ {x:'Hidden information skews who shows up to trade in the first place',k:'b'},
+ {x:'Bailed-out banks re-levering is the classic case',k:'a'},
+ {x:'Akerlof’s used-car “lemons” market is the classic case',k:'b'},
+ {x:'A core problem in insurance economics',k:'both'}]},
+{a:'Deflation',b:'Disinflation',s:[
+ {x:'Prices are outright falling',k:'a'},
+ {x:'Inflation is slowing but prices still rise',k:'b'},
+ {x:'What central banks deliberately engineer during a tightening cycle',k:'b'},
+ {x:'Japan’s lost decades are the cautionary tale',k:'a'},
+ {x:'Describes the direction of price changes in an economy',k:'both'}]},
+{a:'Venture capital (VC)',b:'Private equity (PE)',s:[
+ {x:'Buys minority stakes in young companies, expecting most to fail',k:'a'},
+ {x:'Buys controlling stakes in mature businesses, often with heavy debt',k:'b'},
+ {x:'Returns depend on a few outliers returning the whole fund',k:'a'},
+ {x:'Returns come from leverage, operations, and multiple arbitrage',k:'b'},
+ {x:'Invests through ten-year locked-up limited partnerships',k:'both'}]},
+{a:'RAG (retrieval)',b:'Fine-tuning',s:[
+ {x:'Fetches relevant documents into the context window at question time',k:'a'},
+ {x:'Permanently updates the model’s weights with new training',k:'b'},
+ {x:'The right tool for fresh or frequently-changing knowledge',k:'a'},
+ {x:'The right tool for teaching a persistent style or format',k:'b'},
+ {x:'A standard way to adapt a model to your own data',k:'both'}]},
+{a:'Distillation',b:'Quantization',s:[
+ {x:'A small student model learns to imitate a large teacher',k:'a'},
+ {x:'Stores the same weights at lower numerical precision',k:'b'},
+ {x:'Produces a genuinely different, smaller model',k:'a'},
+ {x:'Shrinks memory use with the same architecture',k:'b'},
+ {x:'A standard technique for making models cheaper to run',k:'both'}]},
 ];
 let drill=null;
 function startDrill(pi){
@@ -1756,6 +1953,199 @@ function openResModal(){
 }
 function closeModal(){ $('#modalRoot').innerHTML=''; }
 
+/* ============================== AI deep dive & chat ============================== */
+const AI_MODEL='claude-opus-4-8';
+let ddCache={}, ddConvo=[], ddBusy=false;
+function getKey(){ try{return localStorage.getItem('lexicon:apikey')||''}catch(e){return ''} }
+function setKey(k){ try{ if(k) localStorage.setItem('lexicon:apikey',k); else localStorage.removeItem('lexicon:apikey'); }catch(e){} }
+
+function mdToHtml(md){
+  const inline=s=>s
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<em>$2</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>');
+  const lines=esc(md).split('\n');
+  let html='',inList=false,para=[];
+  const flush=()=>{ if(para.length){ html+='<p>'+inline(para.join(' '))+'</p>'; para=[]; } };
+  for(const raw of lines){
+    const line=raw.trim();
+    if(/^#{1,4}\s/.test(line)){ flush(); if(inList){html+='</ul>';inList=false;} html+='<h4>'+inline(line.replace(/^#{1,4}\s*/,''))+'</h4>'; }
+    else if(/^[-*•]\s/.test(line)){ flush(); if(!inList){html+='<ul>';inList=true;} html+='<li>'+inline(line.replace(/^[-*•]\s*/,''))+'</li>'; }
+    else if(line===''){ flush(); if(inList){html+='</ul>';inList=false;} }
+    else para.push(line);
+  }
+  flush(); if(inList)html+='</ul>';
+  return html;
+}
+
+async function streamClaude({system,messages,onText}){
+  const key=getKey(); if(!key) throw {code:'nokey'};
+  let res;
+  try{
+    res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'content-type':'application/json',
+        'x-api-key':key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:AI_MODEL, max_tokens:4000, stream:true,
+        thinking:{type:'adaptive'},
+        system, messages
+      })
+    });
+  }catch(e){ throw {code:'network'}; }
+  if(!res.ok){
+    let msg='API error '+res.status;
+    try{ const j=await res.json(); if(j.error&&j.error.message) msg=j.error.message; }catch(e){}
+    throw {code:(res.status===401||res.status===403)?'auth':'api', msg};
+  }
+  const reader=res.body.getReader(); const dec=new TextDecoder();
+  let buf='', full='';
+  while(true){
+    const {done,value}=await reader.read(); if(done)break;
+    buf+=dec.decode(value,{stream:true});
+    const lines=buf.split('\n'); buf=lines.pop();
+    for(const line of lines){
+      if(!line.startsWith('data:'))continue;
+      const data=line.slice(5).trim(); if(!data)continue;
+      let ev; try{ev=JSON.parse(data)}catch(e){continue}
+      if(ev.type==='content_block_delta'&&ev.delta&&ev.delta.type==='text_delta'){ full+=ev.delta.text; onText(full); }
+      else if(ev.type==='error'){ throw {code:'api', msg:(ev.error&&ev.error.message)||'stream error'}; }
+    }
+  }
+  if(!full) throw {code:'api', msg:'The model returned no text (possibly a refusal). Try again.'};
+  return full;
+}
+
+function ddSystem(t){
+  return `You are the deep-dive layer inside Lexicon, a personal terminology-mastery app for finance, economics, and AI. The learner is a finance student building professional fluency — the goal is the instant, load-bearing understanding a practitioner has, not textbook recital.
+Style: mechanism first, then why professionals care; concrete numbers and named real-world examples; honest nuance and common misconceptions; the sharp, direct voice of a practitioner-mentor.
+For the initial deep dive: use markdown with 3-5 short "### " section headers, 450-700 words.
+For follow-up questions: answer directly and concisely, under 200 words unless the question demands more. Plain paragraphs, minimal formatting.`;
+}
+function ddFirstMsg(t){
+  return `Deep dive on the term "${t.term}" (${t.category} → ${t.group}).
+The flashcard definition I already know: "${t.def}"
+Go well beyond it: how it actually works mechanically, a worked example with real numbers where applicable, how it connects to adjacent concepts, what people commonly get wrong, and the questions a professional would ask about it.`;
+}
+function ddApiMessages(t){
+  const base=[{role:'user',content:ddFirstMsg(t)}];
+  if(ddCache[t.id]) base.push({role:'assistant',content:ddCache[t.id]});
+  return base.concat(ddConvo);
+}
+
+function openDeepDive(id){
+  const t=state.terms.find(x=>x.id===id); if(!t)return;
+  ddConvo=[]; ddBusy=false;
+  $('#modalRoot').innerHTML=`<div class="scrim" id="scrim"><div class="modal dd">
+    <div class="grouptag">${esc(t.category)} · ${esc(t.group)}</div>
+    <h3 style="margin:4px 0 0">${esc(t.term)}</h3>
+    <div id="ddBody" class="ddbody"></div>
+    <div id="ddChatWrap"></div>
+    <div class="modalacts" style="margin-top:18px">
+      <button class="btn ghost sm" id="ddKeyBtn">AI settings</button>
+      <button class="btn sm" id="ddClose">Close</button>
+    </div>
+  </div></div>`;
+  $('#ddClose').onclick=closeModal;
+  $('#scrim').onclick=e=>{if(e.target.id==='scrim')closeModal();};
+  $('#ddKeyBtn').onclick=()=>renderKeySetup(t,true);
+  if(ddCache[id]){ $('#ddBody').innerHTML=mdToHtml(ddCache[id]); enableChat(t); }
+  else if(!getKey()) renderKeySetup(t,false);
+  else generateDD(t);
+}
+
+function renderKeySetup(t,manage){
+  const body=$('#ddBody'); if(!body)return;
+  $('#ddChatWrap').innerHTML='';
+  const hasKey=!!getKey();
+  body.innerHTML=`
+    <p style="margin-top:10px">Deep dives and the ask-anything chat are generated live by Claude (${AI_MODEL}) using <strong>your own Anthropic API key</strong>.</p>
+    <div class="ddask" style="margin-top:6px">
+      <input id="ddKeyInput" type="password" placeholder="${hasKey?'Key saved — paste a new one to replace':'sk-ant-…'}" autocomplete="off">
+      <button class="btn" id="ddKeySave">${manage?'Save':'Save & generate'}</button>
+    </div>
+    ${hasKey&&manage?`<button class="btn ghost sm" id="ddKeyRemove" style="margin-top:10px"><span class="danger">Remove saved key</span></button>`:''}
+    <p class="ddnote">Your key is stored only on this device (localStorage) and sent only to api.anthropic.com. Get one at console.anthropic.com → API keys. Note: inside the Claude-artifact version of Lexicon, outside network calls are blocked — the AI layer works in the GitHub Pages / local version.</p>`;
+  $('#ddKeySave').onclick=()=>{
+    const v=$('#ddKeyInput').value.trim();
+    if(v) setKey(v);
+    if(!getKey()){ toast('Paste an API key first'); return; }
+    if(ddCache[t.id]){ $('#ddBody').innerHTML=mdToHtml(ddCache[t.id]); enableChat(t); toast('Saved'); }
+    else generateDD(t);
+  };
+  const rm=$('#ddKeyRemove'); if(rm)rm.onclick=()=>{ setKey(''); toast('Key removed'); renderKeySetup(t,true); };
+}
+
+async function generateDD(t){
+  const body=$('#ddBody'); if(!body)return;
+  body.innerHTML='<p style="margin-top:12px"><span class="ddwait">✦ Generating deep dive…</span></p>';
+  try{
+    const full=await streamClaude({
+      system:ddSystem(t),
+      messages:[{role:'user',content:ddFirstMsg(t)}],
+      onText:txt=>{ const b=$('#ddBody'); if(b) b.innerHTML=mdToHtml(txt); }
+    });
+    ddCache[t.id]=full; Store.set('deepdives',ddCache);
+    const b=$('#ddBody'); if(b) b.innerHTML=mdToHtml(full);
+    enableChat(t);
+  }catch(err){ showDDError(err,t); }
+}
+
+function showDDError(err,t){
+  const body=$('#ddBody'); if(!body)return;
+  if(err.code==='nokey'){ renderKeySetup(t,false); return; }
+  let msg;
+  if(err.code==='network') msg='Couldn’t reach api.anthropic.com. If you’re using Lexicon inside a Claude artifact, its sandbox blocks outside network calls — open the GitHub Pages / local version for AI features. Otherwise check your connection.';
+  else if(err.code==='auth') msg='Your API key was rejected ('+esc(err.msg||'unauthorized')+'). Open AI settings to update it.';
+  else msg=esc(err.msg||'Something went wrong. Try again.');
+  body.innerHTML=`<p style="margin-top:12px;color:var(--warn)">${msg}</p>
+    <button class="btn sm" id="ddRetry" style="margin-top:8px">Try again</button>`;
+  const r=$('#ddRetry'); if(r)r.onclick=()=>{ ddCache[t.id]?enableChat(t):generateDD(t); if(ddCache[t.id]){$('#ddBody').innerHTML=mdToHtml(ddCache[t.id]);} };
+}
+
+function enableChat(t){
+  const wrap=$('#ddChatWrap'); if(!wrap)return;
+  wrap.innerHTML=`<div class="ddchat">
+    <h4>Ask about this concept</h4>
+    <div id="ddMsgs"></div>
+    <div class="ddask">
+      <input id="ddQ" placeholder="e.g. How would this show up in an interview?" autocomplete="off">
+      <button class="btn" id="ddAsk">Ask</button>
+    </div>
+  </div>`;
+  const ask=async()=>{
+    if(ddBusy)return;
+    const inp=$('#ddQ'); const q=inp.value.trim(); if(!q)return;
+    if(!getKey()){ renderKeySetup(t,false); return; }
+    ddBusy=true; inp.value='';
+    const msgs=$('#ddMsgs');
+    msgs.insertAdjacentHTML('beforeend',`<div class="ddmsg user">${esc(q)}</div>`);
+    const aid='dda'+Math.random().toString(36).slice(2,7);
+    msgs.insertAdjacentHTML('beforeend',`<div class="ddmsg ai" id="${aid}"><span class="ddwait">✦ Thinking…</span></div>`);
+    ddConvo.push({role:'user',content:q});
+    try{
+      const full=await streamClaude({
+        system:ddSystem(t),
+        messages:ddApiMessages(t),
+        onText:txt=>{ const el=document.getElementById(aid); if(el) el.innerHTML=mdToHtml(txt); }
+      });
+      ddConvo.push({role:'assistant',content:full});
+      const el=document.getElementById(aid); if(el) el.innerHTML=mdToHtml(full);
+    }catch(err){
+      ddConvo.pop();
+      const el=document.getElementById(aid);
+      if(el) el.innerHTML='<span style="color:var(--warn)">'+(err.code==='network'?'Network blocked — AI works in the GitHub Pages / local version.':esc(err.msg||'Failed — try again.'))+'</span>';
+    }
+    ddBusy=false;
+  };
+  $('#ddAsk').onclick=ask;
+  $('#ddQ').onkeydown=e=>{ if(e.key==='Enter') ask(); };
+}
+
 /* ============================== wiring ============================== */
 function wire(){
   // library
@@ -1765,9 +2155,12 @@ function wire(){
     card.onclick=e=>{ if(e.target.closest('[data-act]'))return; card.classList.toggle('open'); card.classList.toggle('collapsed'); };
   });
   $$('[data-act]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const id=b.dataset.id;
-    if(b.dataset.act==='edit')openTermModal(id);
+    if(b.dataset.act==='dd')openDeepDive(id);
+    else if(b.dataset.act==='edit')openTermModal(id);
     else if(b.dataset.act==='del'){ if(confirm('Delete this term?')){ state.terms=state.terms.filter(t=>t.id!==id); Store.set('terms',state.terms); deck.cards=[]; render(); toast('Deleted'); } }
   });
+  const llb=$('#libListBtn'); if(llb)llb.onclick=()=>{ state.libList=true; render(); };
+  const lmb=$('#libMapBtn'); if(lmb)lmb.onclick=()=>{ state.libList=false; render(); };
 
   // study
   const ds=$('#deckScope'); if(ds)ds.onchange=()=>{ state.scope=ds.value; deck.cards=shuffle(scopeTerms(ds.value)); deck.i=0; deck.flipped=false; render(); };
