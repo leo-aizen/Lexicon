@@ -1,48 +1,93 @@
-<!-- Lexicon — a personal terminology mastery desk -->
+<!-- Lexicon — a personal terminology mastery desk (v2: mobile-first, dark mode, AI curriculum) -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Lexicon">
-<meta name="theme-color" content="#ECEEF1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ECEFED">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1416">
 <title>Lexicon</title>
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#ECEEF1; --paper:#FFFFFF; --paper2:#FAFAF8;
-    --ink:#161A22; --muted:#5B6470; --faint:#8B939E;
-    --line:#E3E6EB; --line2:#EDEFF2;
-    --primary:#15303A; --primary-soft:#1f4654;
-    --accent:#1C7C54; --accent-soft:#E5F1EB;
-    --warn:#B45309; --warn-soft:#F8EBDD;
-    --serif:'Fraunces',Georgia,'Times New Roman',serif;
-    --sans:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;
-    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-    --shadow:0 1px 2px rgba(20,25,35,.04),0 8px 24px rgba(20,25,35,.06);
-    --radius:14px;
+    --bg:#ECEFED; --bar:rgba(236,239,237,.82);
+    --paper:#FFFFFF; --paper2:#F7F9F8;
+    --ink:#141B1E; --body-ink:#313A3E; --muted:#5A666B; --faint:#8A9499;
+    --line:#DFE5E2; --line2:#E9EEEC;
+    --primary:#16343C; --primary-soft:#1F4654; --primary-ink:#F2F7F5;
+    --accent:#177A52; --accent-soft:#E2F0E9;
+    --warn:#B25709; --warn-soft:#F7EBDD;
+    --scrim:rgba(15,20,22,.45);
+    --toast-bg:#141B1E; --toast-ink:#F2F7F5;
+    --sel:#CFE4DA;
+    --serif:ui-serif,"New York","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(16,24,26,.04),0 10px 28px rgba(16,24,26,.06);
+    --radius:16px;
   }
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%;overflow-x:clip}
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0F1416; --bar:rgba(15,20,22,.78);
+      --paper:#1A2124; --paper2:#161C1F;
+      --ink:#ECEFED; --body-ink:#C6CECB; --muted:#8D9996; --faint:#687371;
+      --line:#2A3336; --line2:#222A2D;
+      --primary:#24525F; --primary-soft:#2E6473; --primary-ink:#EAF2F0;
+      --accent:#3FA97C; --accent-soft:rgba(63,169,124,.15);
+      --warn:#E08A3C; --warn-soft:rgba(224,138,60,.13);
+      --scrim:rgba(5,8,9,.6);
+      --toast-bg:#ECEFED; --toast-ink:#10171A;
+      --sel:#2C4A3D;
+      --shadow:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F1416; --bar:rgba(15,20,22,.78);
+    --paper:#1A2124; --paper2:#161C1F;
+    --ink:#ECEFED; --body-ink:#C6CECB; --muted:#8D9996; --faint:#687371;
+    --line:#2A3336; --line2:#222A2D;
+    --primary:#24525F; --primary-soft:#2E6473; --primary-ink:#EAF2F0;
+    --accent:#3FA97C; --accent-soft:rgba(63,169,124,.15);
+    --warn:#E08A3C; --warn-soft:rgba(224,138,60,.13);
+    --scrim:rgba(5,8,9,.6);
+    --toast-bg:#ECEFED; --toast-ink:#10171A;
+    --sel:#2C4A3D;
+    --shadow:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.3);
+  }
+  :root[data-theme="light"]{
+    --bg:#ECEFED; --bar:rgba(236,239,237,.82);
+    --paper:#FFFFFF; --paper2:#F7F9F8;
+    --ink:#141B1E; --body-ink:#313A3E; --muted:#5A666B; --faint:#8A9499;
+    --line:#DFE5E2; --line2:#E9EEEC;
+    --primary:#16343C; --primary-soft:#1F4654; --primary-ink:#F2F7F5;
+    --accent:#177A52; --accent-soft:#E2F0E9;
+    --warn:#B25709; --warn-soft:#F7EBDD;
+    --scrim:rgba(15,20,22,.45);
+    --toast-bg:#141B1E; --toast-ink:#F2F7F5;
+    --sel:#CFE4DA;
+    --shadow:0 1px 2px rgba(16,24,26,.04),0 10px 28px rgba(16,24,26,.06);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;overflow-x:clip;background:var(--bg)}
   html{-webkit-text-size-adjust:100%}
   body{
-    background:var(--bg);color:var(--ink);font-family:var(--sans);
+    color:var(--ink);font-family:var(--sans);
     font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
     overscroll-behavior-y:none;overflow-wrap:break-word;
   }
-  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-  input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;touch-action:manipulation}
+  input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink);background:var(--paper)}
   a{color:var(--primary-soft)}
-  ::selection{background:#cfe3d9}
+  ::selection{background:var(--sel)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 
   .app{max-width:1180px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
 
   /* ---- top bar ---- */
   header.bar{
-    position:sticky;top:0;z-index:30;background:rgba(236,238,241,.86);
-    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:30;background:var(--bar);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
     padding:calc(14px + env(safe-area-inset-top)) calc(22px + env(safe-area-inset-right)) 14px calc(22px + env(safe-area-inset-left));
     display:flex;align-items:center;gap:18px;flex-wrap:wrap;
   }
@@ -50,23 +95,54 @@
   .brand b{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:-.01em}
   .brand span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--faint)}
-  .search{flex:1 1 240px;min-width:180px;position:relative}
+  .search{flex:1 1 240px;min-width:150px;position:relative}
   .search input{
     width:100%;padding:9px 14px 9px 34px;border:1px solid var(--line);
-    border-radius:10px;background:var(--paper);outline:none;transition:border-color .15s;
+    border-radius:12px;background:var(--paper);outline:none;transition:border-color .15s;
   }
-  .search input:focus{border-color:var(--primary-soft)}
+  .search input::placeholder{color:var(--faint)}
+  .search input:focus{border-color:var(--accent)}
   .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);
     width:15px;height:15px;color:var(--faint)}
   nav.tabs{display:flex;gap:2px;flex:0 0 auto;flex-wrap:wrap}
   nav.tabs button{
-    padding:8px 13px;border-radius:9px;font-size:13.5px;font-weight:500;color:var(--muted);
+    padding:8px 13px;border-radius:10px;font-size:13.5px;font-weight:500;color:var(--muted);
     transition:.13s;white-space:nowrap;
   }
   nav.tabs button:hover{color:var(--ink);background:var(--line2)}
-  nav.tabs button.on{background:var(--primary);color:#fff}
+  nav.tabs button.on{background:var(--primary);color:var(--primary-ink)}
 
   main{flex:1;padding:24px calc(22px + env(safe-area-inset-right)) calc(80px + env(safe-area-inset-bottom)) calc(22px + env(safe-area-inset-left));min-width:0;max-width:100%}
+
+  /* ---- bottom tab bar (mobile) ---- */
+  .bottomnav{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+    background:var(--bar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-top:1px solid var(--line);
+    padding:6px 10px calc(8px + env(safe-area-inset-bottom));
+  }
+  .bottomnav button{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    padding:6px 2px 4px;border-radius:12px;color:var(--faint);
+    font-size:10.5px;font-weight:600;letter-spacing:.02em;
+    transition:color .15s;user-select:none;-webkit-user-select:none;
+  }
+  .bottomnav button svg{width:23px;height:23px;stroke-width:1.7}
+  .bottomnav button.on{color:var(--accent)}
+  .bottomnav button:active{transform:scale(.94)}
+
+  /* ---- mobile chip rails ---- */
+  .chiprail{display:none;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}
+  .chiprail::-webkit-scrollbar{display:none}
+  .chip2{flex:0 0 auto;padding:8px 15px;border-radius:999px;border:1px solid var(--line);
+    background:var(--paper);font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;
+    transition:.13s;user-select:none;-webkit-user-select:none}
+  .chip2:active{transform:scale(.96)}
+  .chip2.on{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+  .chiprail.sub{padding-top:0}
+  .chiprail.sub .chip2{padding:6px 12px;font-size:12px;font-weight:500}
+  .chiprail.sub .chip2.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
 
   /* ---- library layout ---- */
   .lib{display:grid;grid-template-columns:248px 1fr;gap:26px;align-items:start}
@@ -75,18 +151,18 @@
     color:var(--faint);margin:0 0 10px 6px}
   .cat{margin-bottom:4px}
   .cat>.cathead{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
-    padding:7px 8px;border-radius:8px;font-weight:600;font-size:13.5px;color:var(--ink)}
+    padding:7px 8px;border-radius:9px;font-weight:600;font-size:13.5px;color:var(--ink)}
   .cat>.cathead:hover{background:var(--line2)}
   .cat .num{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500}
-  .grp{display:block;width:100%;text-align:left;padding:6px 8px 6px 24px;border-radius:8px;
+  .grp{display:block;width:100%;text-align:left;padding:6px 8px 6px 24px;border-radius:9px;
     font-size:13px;color:var(--muted);position:relative}
   .grp:hover{background:var(--line2);color:var(--ink)}
-  .grp.on{color:var(--primary);font-weight:600;background:var(--accent-soft)}
+  .grp.on{color:var(--accent);font-weight:600;background:var(--accent-soft)}
   .grp .ct{float:right;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
-  .index .all{width:100%;text-align:left;padding:7px 8px;border-radius:8px;font-weight:600;
+  .index .all{width:100%;text-align:left;padding:7px 8px;border-radius:9px;font-weight:600;
     font-size:13.5px;margin-bottom:8px}
   .index .all:hover{background:var(--line2)}
-  .index .all.on{background:var(--primary);color:#fff}
+  .index .all.on{background:var(--primary);color:var(--primary-ink)}
 
   .panel{min-width:0}
   .panelhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
@@ -94,30 +170,33 @@
   .panelhead .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--faint)}
   .panelhead h2{font-family:var(--serif);font-weight:500;font-size:27px;margin:3px 0 0;
-    letter-spacing:-.015em;line-height:1.1}
+    letter-spacing:-.015em;line-height:1.1;text-wrap:balance}
   .panelhead p{margin:7px 0 0;color:var(--muted);font-size:13.5px;max-width:60ch}
 
-  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:10px;
-    font-size:13.5px;font-weight:600;background:var(--primary);color:#fff;transition:.13s}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 15px;
+    border-radius:11px;font-size:13.5px;font-weight:600;background:var(--primary);
+    color:var(--primary-ink);transition:.13s;min-height:38px;user-select:none;-webkit-user-select:none}
   .btn:hover{background:var(--primary-soft)}
+  .btn:active{transform:scale(.97)}
   .btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
   .btn.ghost:hover{border-color:var(--muted)}
-  .btn.sm{padding:6px 11px;font-size:12.5px}
+  .btn.sm{padding:6px 12px;font-size:12.5px;min-height:34px}
 
   /* ---- term cards ---- */
   .terms{display:flex;flex-direction:column;gap:11px}
   .term{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
-    padding:17px 19px;transition:border-color .15s,box-shadow .15s;cursor:pointer}
-  .term:hover{border-color:#cfd5dd;box-shadow:var(--shadow)}
+    padding:17px 19px;transition:border-color .15s,box-shadow .15s,transform .1s;cursor:pointer}
+  .term:hover{border-color:var(--faint);box-shadow:var(--shadow)}
+  .term:active{transform:scale(.995)}
   .term .tline{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
   .term h3{font-family:var(--serif);font-weight:600;font-size:19px;margin:0;letter-spacing:-.01em}
   .term .meta{display:flex;align-items:center;gap:7px;flex:0 0 auto}
   .term .grouptag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--faint);
     text-transform:uppercase}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--line);flex:0 0 auto}
   .dot.learning{background:var(--warn)}
   .dot.known{background:var(--accent)}
-  .term .def{margin:8px 0 0;color:#2c333d;font-size:14px;line-height:1.6}
+  .term .def{margin:8px 0 0;color:var(--body-ink);font-size:14px;line-height:1.6}
   .term.collapsed .def{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
     overflow:hidden}
   .term .acts{margin-top:12px;display:none;gap:7px;flex-wrap:wrap}
@@ -130,8 +209,8 @@
   .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
     padding:22px;box-shadow:var(--shadow)}
   .scopebar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
-  .scopebar select{padding:8px 11px;border:1px solid var(--line);border-radius:9px;
-    background:var(--paper);outline:none}
+  .scopebar select{padding:8px 11px;border:1px solid var(--line);border-radius:10px;
+    background:var(--paper);outline:none;min-width:0;max-width:100%}
   .scopebar label{font-size:12.5px;color:var(--muted);font-weight:500}
 
   /* ---- flashcards ---- */
@@ -141,12 +220,12 @@
     -webkit-transform-style:preserve-3d;transform-style:preserve-3d}
   .flash.flip .flashinner{transform:rotateY(180deg)}
   .face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;background:var(--paper);
-    border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+    border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
     padding:30px;display:flex;flex-direction:column;justify-content:center;align-items:center;
     text-align:center}
   .face .lab{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--faint);position:absolute;top:18px;left:0;right:0}
-  .face.front h2{font-family:var(--serif);font-weight:600;font-size:30px;margin:0;letter-spacing:-.02em}
+  .face.front h2{font-family:var(--serif);font-weight:600;font-size:30px;margin:0;letter-spacing:-.02em;text-wrap:balance}
   .face.front .grouptag{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px}
   .face.back{transform:rotateY(180deg) translateZ(1px);align-items:flex-start;text-align:left;justify-content:flex-start}
   .face.back .bk-scroll{overflow-y:auto;width:100%;height:100%;-webkit-overflow-scrolling:touch}
@@ -156,13 +235,14 @@
   .flash .face.front{transition:visibility 0s .22s}
   .face.back .lab{position:static;text-align:left;margin:0 0 2px}
   .face.back .bk-term{font-family:var(--serif);font-weight:600;font-size:18px;margin:6px 0 10px}
-  .face.back .bk-def{font-size:14.5px;line-height:1.62;color:#2c333d}
+  .face.back .bk-def{font-size:14.5px;line-height:1.62;color:var(--body-ink)}
   .flash .hint{position:absolute;bottom:16px;left:0;right:0;font-size:11.5px;color:var(--faint)}
   .deckctrl{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .deckctrl .mid{display:flex;gap:8px}
-  .progbar{height:5px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 0 14px}
-  .progbar i{display:block;height:100%;background:var(--accent);transition:width .3s}
-  .deckmeta{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  .deckctrl .mid{display:flex;gap:8px;min-width:0}
+  .progbar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 0 14px}
+  .progbar i{display:block;height:100%;background:var(--accent);transition:width .3s;border-radius:4px}
+  .deckmeta{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--muted);
+    margin-bottom:6px;font-variant-numeric:tabular-nums}
 
   /* ---- quiz ---- */
   .quizwrap{max-width:680px;margin:0 auto}
@@ -171,25 +251,26 @@
   .q-body{font-size:17px;line-height:1.55;margin-bottom:20px}
   .q-body.term{font-family:var(--serif);font-size:26px;font-weight:600}
   .opts{display:flex;flex-direction:column;gap:9px}
-  .opt{text-align:left;padding:13px 15px;border:1px solid var(--line);border-radius:11px;
-    background:var(--paper);font-size:14px;line-height:1.5;transition:.12s}
+  .opt{text-align:left;padding:13px 15px;border:1px solid var(--line);border-radius:13px;
+    background:var(--paper);font-size:14px;line-height:1.5;transition:.12s;min-height:44px}
   .opt:hover{border-color:var(--muted)}
+  .opt:active{transform:scale(.99)}
   .opt.correct{border-color:var(--accent);background:var(--accent-soft)}
   .opt.wrong{border-color:var(--warn);background:var(--warn-soft)}
   .opt:disabled{cursor:default}
   .typed{display:flex;gap:9px}
-  .typed input{flex:1;padding:13px 15px;border:1px solid var(--line);border-radius:11px;
+  .typed input{flex:1;min-width:0;padding:13px 15px;border:1px solid var(--line);border-radius:13px;
     outline:none;font-size:15px}
-  .typed input:focus{border-color:var(--primary-soft)}
-  .reveal{margin-top:18px;padding:16px 18px;border-radius:12px;border:1px solid var(--line);
+  .typed input:focus{border-color:var(--accent)}
+  .reveal{margin-top:18px;padding:16px 18px;border-radius:14px;border:1px solid var(--line);
     background:var(--paper2)}
   .reveal .r-term{font-family:var(--serif);font-weight:600;font-size:18px}
-  .reveal .r-def{font-size:14px;color:#2c333d;margin-top:6px;line-height:1.6}
+  .reveal .r-def{font-size:14px;color:var(--body-ink);margin-top:6px;line-height:1.6}
   .reveal .grade{display:flex;gap:8px;margin-top:14px}
   .scoreline{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;
-    color:var(--muted);margin-bottom:16px}
+    color:var(--muted);margin-bottom:16px;font-variant-numeric:tabular-nums}
   .results{text-align:center;padding:14px}
-  .results .score{font-family:var(--serif);font-size:52px;font-weight:600}
+  .results .score{font-family:var(--serif);font-size:52px;font-weight:600;font-variant-numeric:tabular-nums}
   .results .sub{color:var(--muted);margin-top:4px}
   .misslist{margin-top:22px;text-align:left}
   .misslist h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
@@ -200,17 +281,17 @@
   /* ---- compare ---- */
   .cmp-pick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
   .chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:20px;
-    background:var(--primary);color:#fff;font-size:13px;font-weight:500}
-  .chip button{color:#cdd8d4;font-size:15px;line-height:1}
+    background:var(--primary);color:var(--primary-ink);font-size:13px;font-weight:500}
+  .chip button{color:var(--primary-ink);opacity:.7;font-size:15px;line-height:1;padding:2px}
   .cmp-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
   .cmp-col h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 4px}
   .cmp-col .grouptag{font-family:var(--mono);font-size:10px;color:var(--faint);text-transform:uppercase;
     letter-spacing:.06em}
-  .cmp-col .def{margin-top:12px;font-size:14px;line-height:1.62;color:#2c333d}
+  .cmp-col .def{margin-top:12px;font-size:14px;line-height:1.62;color:var(--body-ink)}
   .related{margin-top:20px;padding-top:16px;border-top:1px solid var(--line2)}
   .related h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
     color:var(--faint);margin:0 0 10px}
-  .related .r{display:inline-flex;margin:0 6px 6px 0;padding:5px 11px;border:1px solid var(--line);
+  .related .r{display:inline-flex;margin:0 6px 6px 0;padding:6px 12px;border:1px solid var(--line);
     border-radius:18px;font-size:12.5px;background:var(--paper)}
   .related .r:hover{border-color:var(--muted)}
 
@@ -225,60 +306,79 @@
     word-break:break-all}
   .resitem .note{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.55}
   .resitem .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
-    padding:3px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);flex:0 0 auto}
-
-  /* ---- dashboard strip ---- */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:22px}
-  .stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-  .stat .n{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1}
-  .stat .l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--faint);margin-top:6px}
-  .stat .n.acc{color:var(--accent)} .stat .n.wn{color:var(--warn)}
+    padding:3px 8px;border-radius:7px;background:var(--accent-soft);color:var(--accent);flex:0 0 auto}
 
   /* ---- SRS additions ---- */
   .bk-core{font-weight:600;font-size:16px;line-height:1.5;margin-bottom:10px}
   .modebar{display:flex;gap:8px;margin-bottom:14px}
   .modebar button{flex:1;justify-content:center}
-  .duebadge{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.05em}
+  .duebadge{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.05em;
+    font-variant-numeric:tabular-nums}
   .gradebtns{display:flex;gap:8px;margin-top:14px}
   .gradebtns button{flex:1;justify-content:center}
-  .schemaline{font-size:13px;color:var(--muted);font-style:italic;margin:10px 0 0}
+  .schemaline{font-size:13px;color:var(--muted);font-style:italic;margin:10px 0 0;font-family:var(--serif)}
+
   /* ---- modal ---- */
-  .scrim{position:fixed;inset:0;background:rgba(20,25,35,.4);backdrop-filter:blur(2px);
+  .scrim{position:fixed;inset:0;background:var(--scrim);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
     z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:40px 18px;overflow:auto}
-  .modal{background:var(--paper);border-radius:18px;width:100%;max-width:540px;padding:26px;
-    box-shadow:0 30px 80px rgba(0,0,0,.25)}
+  .modal{background:var(--paper);border-radius:20px;width:100%;max-width:540px;padding:26px;
+    box-shadow:0 30px 80px rgba(0,0,0,.3)}
   .modal h3{font-family:var(--serif);font-weight:600;font-size:22px;margin:0 0 18px}
   .field{margin-bottom:14px}
   .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;
     font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
   .field input,.field textarea,.field select{width:100%;padding:10px 12px;border:1px solid var(--line);
-    border-radius:10px;outline:none;background:var(--paper)}
+    border-radius:11px;outline:none;background:var(--paper)}
   .field textarea{min-height:120px;resize:vertical;line-height:1.55}
-  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary-soft)}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .modalacts{display:flex;justify-content:space-between;gap:8px;margin-top:8px}
   .danger{color:var(--warn)}
 
   .savenote{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
-    background:var(--ink);color:#fff;padding:9px 16px;border-radius:10px;font-size:13px;
+    background:var(--toast-bg);color:var(--toast-ink);padding:9px 16px;border-radius:12px;font-size:13px;
     opacity:0;transition:.25s;z-index:60;pointer-events:none}
   .savenote.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  /* mobile */
-  .menubtn{display:none}
+  /* ---- mobile ---- */
   @media(max-width:780px){
+    body{font-size:16px}
     input,textarea,select{font-size:16px}
-    .search input{font-size:16px}
+    .search input{font-size:16px;padding:10px 14px 10px 36px;border-radius:13px}
+    header.bar{gap:12px;padding-left:calc(16px + env(safe-area-inset-left));
+      padding-right:calc(16px + env(safe-area-inset-right));padding-bottom:12px}
+    .brand b{font-size:21px}
+    nav.tabs{display:none}
+    .bottomnav{display:flex}
+    main{padding:18px calc(16px + env(safe-area-inset-right)) calc(104px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
     .card,.term,.cmp-col{max-width:100%;overflow-wrap:break-word}
     .lib{grid-template-columns:1fr}
-    .index{position:static;display:none;margin-bottom:18px;background:var(--paper);
-      border:1px solid var(--line);border-radius:14px;padding:14px}
-    .index.show{display:block}
-    .menubtn{display:inline-flex}
-    .panelhead h2{font-size:23px}
-    nav.tabs{order:3;width:100%}
+    .index{display:none}
+    .chiprail{display:flex}
+    .panelhead h2{font-size:24px}
+    .panelhead p{font-size:13px}
     .row2{grid-template-columns:1fr}
+    .btn{min-height:44px;padding:11px 16px;font-size:14.5px}
+    .btn.sm{min-height:40px;padding:8px 14px;font-size:13.5px}
+    .opt{padding:14px 16px;font-size:15px;border-radius:14px}
+    .term{padding:16px;border-radius:15px}
+    .term h3{font-size:18px}
+    .term .def{font-size:14.5px}
+    .flash{height:min(56vh,430px)}
+    .face{padding:26px 22px}
+    .face.front h2{font-size:27px}
+    .face.back .bk-def{font-size:15px}
+    .deckctrl .mid{display:none}
+    .savenote{bottom:calc(86px + env(safe-area-inset-bottom))}
+    .scrim{align-items:flex-end;padding:0}
+    .modal{max-width:100%;border-radius:22px 22px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+      max-height:92dvh;overflow-y:auto}
+    .results .score{font-size:46px}
+    .resitem{flex-direction:column}
+    .resitem>div:last-child{flex-direction:row;width:100%;justify-content:space-between;align-items:center}
+  }
+  @media(max-width:390px){
+    .brand span{display:none}
   }
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important}
@@ -291,7 +391,7 @@
     <div class="brand"><b>Lexicon</b><span>mastery&nbsp;desk</span></div>
     <div class="search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input id="globalSearch" placeholder="Search terms & definitions…" autocomplete="off">
+      <input id="globalSearch" placeholder="Search terms &amp; definitions…" autocomplete="off">
     </div>
     <nav class="tabs" id="tabs">
       <button data-view="library" class="on">Library</button>
@@ -303,6 +403,29 @@
   </header>
   <main id="main"></main>
 </div>
+
+<nav class="bottomnav" id="bottomnav">
+  <button data-view="library" class="on" aria-label="Library">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.4 4.9 8 4 4 4v14.5c4 0 6.4.9 8 2.5 1.6-1.6 4-2.5 8-2.5V4c-4 0-6.4.9-8 2.5z"/><path d="M12 6.5V21"/></svg>
+    <span>Library</span>
+  </button>
+  <button data-view="study" aria-label="Study">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="14.5" height="12" rx="2.2"/><path d="M7.5 7.5V6a2.2 2.2 0 0 1 2.2-2.2h9.1A2.2 2.2 0 0 1 21 6v9.3a2.2 2.2 0 0 1-2.2 2.2h-1.3"/></svg>
+    <span>Study</span>
+  </button>
+  <button data-view="quiz" aria-label="Quiz">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.3 12.4 2.6 2.6 4.8-5.4"/></svg>
+    <span>Quiz</span>
+  </button>
+  <button data-view="compare" aria-label="Compare">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="7.6" height="15" rx="2"/><rect x="13.4" y="4.5" width="7.6" height="15" rx="2"/></svg>
+    <span>Compare</span>
+  </button>
+  <button data-view="resources" aria-label="Resources">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h11V21l-5.5-3.8L6.5 21z"/></svg>
+    <span>Reading</span>
+  </button>
+</nav>
 
 <div id="modalRoot"></div>
 <div class="savenote" id="savenote">Saved</div>
@@ -318,16 +441,20 @@ const norm=s=>String(s).toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9 
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 
 /* ============================== persistence ============================== */
+/* Tiered: window.storage (hosted API) -> localStorage -> in-memory */
+const LSP='lexicon:';
 const Store={
   mem:{},
   async get(k){
-    try{ if(window.storage){ const r=await window.storage.get(k); return r&&r.value? JSON.parse(r.value):null; } }
+    try{ if(window.storage){ const r=await window.storage.get(k); if(r&&r.value!=null) return JSON.parse(r.value); } }
     catch(e){ /* missing key throws */ }
+    try{ const v=localStorage.getItem(LSP+k); if(v!=null) return JSON.parse(v); }catch(e){}
     return (k in this.mem)? this.mem[k]:null;
   },
   async set(k,v){
-    this.mem[k]=v;
-    try{ if(window.storage) await window.storage.set(k,JSON.stringify(v)); }catch(e){ console.warn('storage',e); }
+    this.mem[k]=v; const s=JSON.stringify(v);
+    try{ if(window.storage) await window.storage.set(k,s); }catch(e){ console.warn('storage',e); }
+    try{ localStorage.setItem(LSP+k,s); }catch(e){}
   }
 };
 let saveT; function toast(m='Saved'){const n=$('#savenote');n.textContent=m;n.classList.add('show');clearTimeout(saveT);saveT=setTimeout(()=>n.classList.remove('show'),1400);}
@@ -345,6 +472,9 @@ const GROUP_ORDER=[
   ['Finance','Street Jargon & Shorthand'],
   ['Economics','Macro, Rates & Policy'],
   ['Economics','Economic Principles & Behavior'],
+  ['Artificial Intelligence','Foundations & Learning'],
+  ['Artificial Intelligence','Architectures & Training'],
+  ['Artificial Intelligence','Deployment, Agents & Frontier'],
 ];
 const SEED=[
 /* ---------- Regulation & Access ---------- */
@@ -843,6 +973,70 @@ const SEED=[
 {t:'Deflation vs. disinflation',c:'Economics',g:'Macro, Rates & Policy',sg:'Macro Indicators & Policy',q:`Prices actually falling versus merely rising more slowly`,d:`The distinction that separates good news from alarming news: one is inflation slowing (8% to 3% — what central banks engineer on purpose), the other is prices outright falling — which sounds pleasant and is macroeconomically dangerous, since expectations of cheaper tomorrow suppress spending today and debt burdens grow in real terms (Japan's lost decades). Confusing them is among the most common errors in financial commentary.`},
 {t:'Base effects',c:'Economics',g:'Macro, Rates & Policy',sg:'Macro Indicators & Policy',q:`Year-over-year distortions caused by what happened a year ago`,d:`Distortions in year-over-year figures caused by the comparison period rather than current conditions — inflation "falling" because last year's oil spike rolls out of the calculation, growth "surging" against a lockdown quarter. Sophisticated readers check the month-over-month annualized trend instead. Half of macro commentary in any given month is people either exploiting or failing to notice this arithmetic.`},
 
+/* ---------- New: quality, moats & missing foundations ---------- */
+{t:'Economic moat',c:'Finance',g:'Accounting & Business Quality',sg:'Company & Business-Quality Metrics',q:`The structural defense that keeps competitors from eroding high returns`,d:`Buffett's metaphor for a durable competitive advantage — the structural feature that lets a business sustain returns above its cost of capital while competitors try and fail to take them. The recognized sources: network effects, switching costs, intangible assets (brands, patents, licenses), cost advantages, and efficient scale. The analytical discipline is specificity: "great products" and "strong management" are not moats — they're what every company claims. A moat is only real if you can name the mechanism that punishes a well-funded attacker.`},
+{t:'Rule of 40',c:'Finance',g:'Accounting & Business Quality',sg:'Company & Business-Quality Metrics',q:`Growth rate plus profit margin should clear forty in healthy software`,d:`The software investor's balance test: revenue growth rate plus free-cash-flow (or EBITDA) margin should exceed 40%. A company growing 60% while burning 20% margins passes; one growing 10% at 10% margins fails. Its purpose is to price the growth-profitability tradeoff on one scale — hypergrowth excuses losses only up to a point, and mature slow growth demands real margins. Crude but ubiquitous in SaaS valuation conversations, board decks, and banker screens.`},
+{t:'CAC payback period',c:'Finance',g:'Accounting & Business Quality',sg:'Company & Business-Quality Metrics',q:`How many months of a customer's margin repay the cost of winning them`,d:`The months of gross margin from a new customer needed to recoup what it cost to acquire them — the speed limit on growth. Under 12 months is strong; past 24, growth consumes cash faster than customers return it, and the company is effectively financing its own expansion on faith. It pairs with LTV/CAC as the "when" to that ratio's "whether": a great lifetime ratio with a five-year payback still bankrupts you if funding dries up before the payback arrives.`},
+{t:'Economies of scale & scope',c:'Economics',g:'Economic Principles & Behavior',sg:'Economic Principles',q:`Unit costs falling as volume grows, or as one base serves many products`,d:`Scale: average cost per unit falls as output rises, because fixed costs spread across more units — the logic of factories, cloud data centers, and index funds. Scope: one asset base serves many products cheaper than separate firms could (Amazon's logistics carrying everything). Both create natural concentration and are among the most durable moat sources — but they cut both ways: the scale player's cost advantage is also the reason attacking them head-on is economically irrational, until a technology shift resets the cost curve.`},
+{t:'Network effects',c:'Economics',g:'Economic Principles & Behavior',sg:'Economic Principles',q:`Each new user making the product more valuable to every other user`,d:`When a product's value rises with the number of users — each new participant makes it better for all the rest. Telephones, exchanges, marketplaces, social platforms, payment rails. The economics are winner-take-most: past a tipping point, the biggest network is rationally everyone's choice, which is why these businesses command extreme valuations and antitrust attention. The professional nuance is distinguishing true network effects from mere scale, and noticing when they run in reverse — users leaving make the product worse, and collapses are as nonlinear as the rises.`},
+{t:'Goodhart’s law',c:'Economics',g:'Economic Principles & Behavior',sg:'Economic Principles',q:`When a measure becomes a target, it stops measuring anything`,d:`"When a measure becomes a target, it ceases to be a good measure." Optimize for the metric and people deliver the metric, not the underlying thing it proxied: teachers teach to the test, banks structure around capital ratios, managers hit EPS by cutting R&D. It's the deep reason non-GAAP adjustments proliferate, why benchmark-hugging funds exist, and why every incentive plan eventually gets gamed. The analytical reflex: whenever a number is being rewarded, ask what behavior is actually being purchased.`},
+{t:'Survivorship bias',c:'Economics',g:'Economic Principles & Behavior',sg:'Behavioral Finance & Psychology',q:`Judging by the visible winners while the failures went unrecorded`,d:`Drawing conclusions from the sample that survived while the failures silently exited the data. Fund industry returns look better than investors' actual experience because dead funds vanish from databases; "stocks always come back" is a claim about indexes that continuously delete the ones that didn't. The WWII bomber parable — armor where returning planes weren't hit — is the canonical illustration. Every backtest, every track record, every success study deserves the question: where are the ones that didn't make it?`},
+
+/* ---------- New: markets, portfolio & allocator gaps ---------- */
+{t:'Compounding',c:'Finance',g:'Portfolio, Risk & Performance',sg:'Performance & Return Metrics',q:`Returns earning returns; the exponential engine of all wealth math`,d:`Returns earned on prior returns, so wealth grows geometrically rather than linearly — the single most important mathematical fact in finance. Its properties are counterintuitive: time matters more than rate (a decade's head start beats years of brilliance), small edges become enormous over decades (7% doubles money every ~10 years; 10% every ~7 — the Rule of 72), and interruptions are catastrophically expensive, which is why "don't lose money" and "stay invested" are the two rules everyone repeats. Buffett's fortune is less a genius story than an uninterrupted-compounding-since-age-eleven story.`},
+{t:'Efficient Market Hypothesis (EMH)',c:'Finance',g:'Markets & Trading',sg:'Equity Investing Styles',q:`The claim that prices already reflect all available information`,d:`Fama's proposition that market prices incorporate available information, so beating the market persistently should be impossible without new information or better analysis. It comes in strengths (weak, semi-strong, strong), anchors the academic case for indexing, and is simultaneously the most productive and most attacked idea in finance. The working resolution most professionals hold: markets are mostly efficient most of the time — efficient enough to humble amateurs, inefficient enough at the edges (forced selling, illiquidity, panic, neglect) to pay the few who do real work. The Grossman-Stiglitz twist: prices are only informative because someone is paid to make them so.`},
+{t:'Kelly criterion',c:'Finance',g:'Portfolio, Risk & Performance',sg:'Portfolio Construction & Risk',q:`The formula for how much to bet when you have an edge`,d:`The formula for optimal bet sizing: stake a fraction of capital proportional to your edge divided by the odds. Bet more and volatility eventually ruins you even with a genuine edge; bet less and you leave compounding on the table. Its investing lesson is less the formula than the frame: position sizing is a decision as important as security selection, overbetting is fatal even when you're right about the odds, and most practitioners run "fractional Kelly" because real-world edges are estimated, not known. Thorp used it at the blackjack table and then on Wall Street.`},
+{t:'Illiquidity premium',c:'Finance',g:'Hedge Funds & Private Markets',sg:'Private Markets — PE, VC & Secondaries',q:`The extra return demanded for locking money up for years`,d:`The additional expected return investors demand for holding assets they can't quickly sell — the theoretical justification for private markets' entire pitch: lock capital for a decade, earn a premium over public equivalents. The live controversy: how much of the measured premium is real versus an artifact of smoothed marks that hide volatility ("volatility laundering," in Cliff Asness's phrase). The honest framing is that illiquidity is a cost you should be paid to bear — so the burden of proof sits on the manager charging 2-and-20 to deliver it.`},
+{t:'Denominator effect',c:'Finance',g:'Hedge Funds & Private Markets',sg:'Private Markets — PE, VC & Secondaries',q:`Public losses mechanically pushing private allocations over their targets`,d:`When public markets fall fast, an allocator's private holdings — marked slowly and smoothly — suddenly balloon as a percentage of the shrunken total portfolio, breaching allocation targets without a single private asset being bought. The consequences cascade: new commitments freeze, LP stakes hit the secondary market at discounts, and fundraising winters follow public bear markets with a lag. It's a purely mechanical artifact of stale marks meeting live prices — and one of the best examples of how accounting conventions drive real capital flows.`},
+{t:'Endowment model',c:'Finance',g:'Hedge Funds & Private Markets',sg:'Private Markets — PE, VC & Secondaries',q:`Swensen's playbook: perpetual capital heavily allocated to illiquid alternatives`,d:`David Swensen's Yale playbook: a perpetual institution with no redemption risk should harvest the illiquidity premium aggressively — heavy allocations to private equity, venture, real assets, and absolute-return strategies, light on bonds and public equity. It produced decades of spectacular returns and an industry of imitators. The caveats are structural: it depends on genuinely superior manager access (Yale gets into funds you can't), tolerance for deep illiquidity, and time horizons most investors only think they have. Copied without those ingredients, it's fee-heavy underperformance.`},
+{t:'Insider trading & MNPI',c:'Finance',g:'Markets & Trading',sg:'Market Structure & Trading',q:`Trading on material non-public information; the line that ends careers`,d:`Trading on material non-public information — facts a reasonable investor would consider important (a pending merger, an earnings miss, a failed trial) that haven't been disclosed. The legal line runs through duty: executives, bankers, lawyers, and anyone they tip are covered; assembling the same conclusion from public scraps ("mosaic theory") is legitimate research. This is why expert networks are compliance minefields, why 10b5-1 plans exist for executive selling, and why the buy side's first question about an edge is where it came from.`},
+{t:'SPAC',c:'Finance',g:'Valuation & Deals',sg:'Deals & Corporate Finance',q:`A blank-check shell that raises cash first and finds a company second`,d:`A Special Purpose Acquisition Company: a listed shell that raises cash with no business, then hunts for a private company to merge with — taking it public through the back door, with lighter disclosure than an IPO (notably, forward projections allowed). The 2020-21 mania minted hundreds; the aftermath was brutal, with most deals deeply underwater. The structural tell was the incentives: sponsors earned their 20% promote for closing any deal, not a good one — a textbook principal-agent case study now taught alongside the wreckage.`},
+{t:'Money market fund',c:'Finance',g:'Fixed Income, Credit & Derivatives',sg:'Fixed Income & Rates',q:`The cash-like fund holding T-bills and commercial paper at a stable dollar`,d:`A fund holding the shortest, safest paper — T-bills, repo, commercial paper — engineered to hold a stable $1 share price and function as cash that pays yield. Trillions sit in them, and they're systemically double-edged: "breaking the buck" (Reserve Primary, 2008) triggered a modern bank run through the plumbing of finance. In the rate-hike era they became the story again — households discovered 5% yields and drained bank deposits, the mechanism behind the 2023 regional bank stress.`},
+{t:'Bank run & lender of last resort',c:'Economics',g:'Macro, Rates & Policy',sg:'Macro Indicators & Policy',q:`Self-fulfilling deposit flight, and the central bank function that stops it`,d:`Banks borrow short (deposits withdrawable any moment) and lend long (mortgages, loans) — a maturity mismatch that works until depositors doubt it. Then withdrawal becomes rational precisely because others are withdrawing, and a solvent bank can die of illiquidity in days; SVB's 2023 collapse compressed the classic into 48 smartphone-fueled hours. The countermeasures define modern finance: deposit insurance to remove the incentive, and the central bank as lender of last resort — Bagehot's dictum: lend freely, against good collateral, at a penalty rate — to make the panic unnecessary.`},
+
+/* ---------- AI: Foundations & Learning ---------- */
+{t:'Machine learning',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`Programs that improve from data instead of being explicitly programmed`,d:`The paradigm shift underneath everything: instead of a programmer writing rules ("if email contains X, mark spam"), the system infers the rules from examples — show it a million labeled emails and it finds the patterns itself. The trade is control for capability: learned systems handle problems too complex to specify by hand (vision, language, protein folding), at the cost of behaving statistically rather than logically. Everything else in this category — neural networks, transformers, GPT — is machinery for doing this at ever greater scale.`},
+{t:'Neural network',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`Layers of weighted sums and simple nonlinearities that approximate any function`,d:`The workhorse model class: layers of simple units, each computing a weighted sum of its inputs and passing it through a nonlinearity, stacked so that early layers detect simple patterns and deeper layers compose them into abstract ones. The loose brain metaphor matters less than the mathematical fact: with enough units, such a network can approximate essentially any function — the question was never expressiveness but whether you could train one. "Deep learning" just means many layers, which turned out to be the thing that works when fed enough data and compute.`},
+{t:'Weights / parameters',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`The billions of learned numbers that literally are the model`,d:`The adjustable numbers inside a network — the strength of every connection — which training tunes and inference merely reads. This is the load-bearing concept: a "70-billion-parameter model" is nothing but 70 billion of these numbers, and everything the model knows is encoded in them, not stored in any retrievable database. It's why models can't cite where they learned something, why "open weights" means releasing the actual numbers, and why a file of floating-point values on a hard drive is now among the most valuable artifacts in industry.`},
+{t:'Loss function',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`The single number scoring how wrong the model is; training's objective`,d:`The mathematical definition of "wrong" — a single number scoring the gap between the model's output and the desired one, which training exists to shrink. For language models it's essentially "how surprised was the model by the actual next word." The deep point: the loss is the only thing the optimization actually pursues, so everything the model appears to want is downstream of this one choice. Whole subfields (and alignment debates) reduce to the observation that what you can write as a loss function is not always what you actually want — Goodhart's law, formalized in code.`},
+{t:'Gradient descent',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`Nudging every parameter downhill on the loss surface, step by step`,d:`The learning algorithm: compute which direction each parameter should move to reduce the loss slightly, take a small step that way, repeat billions of times. The image is a hiker descending a fog-covered mountain by always stepping downhill. Stochastic gradient descent estimates the slope from small random batches of data rather than everything at once — noisy but vastly cheaper, and the noise turns out to help. That such a brutally simple procedure, scaled up, produces systems that write and reason is arguably the most consequential empirical surprise in the history of computing.`},
+{t:'Backpropagation',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`The chain-rule algorithm assigning blame for error to every weight`,d:`The algorithm that makes gradient descent possible in deep networks: after measuring the error at the output, it works backwards layer by layer (via calculus's chain rule) computing exactly how much each of the billions of weights contributed — so each can be nudged in proportion to its blame. Credit assignment at scale. It dates to the 1980s; what changed was hardware — GPUs made running it across billions of parameters and trillions of tokens economical, which is why a forty-year-old algorithm sits at the center of a trillion-dollar buildout.`},
+{t:'Overfitting & generalization',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`Memorizing the training data versus learning patterns that transfer`,d:`The central tension of all learning: a model can score perfectly on its training data by memorizing it, while learning nothing that transfers to new cases — like a student who memorizes past exams. Generalization is the actual goal, which is why performance is always measured on held-out data the model never saw. The classic remedies: more data, regularization, early stopping. The quant-finance parallel is exact — a backtest is training data, live trading is the test set, and most "profitable" strategies were overfit all along.`},
+{t:'Supervised, unsupervised & self-supervised learning',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`Where the training signal comes from: labels, structure, or the data itself`,d:`The taxonomy by training signal. Supervised: humans label examples (this image is a cat) — powerful but bottlenecked by labeling cost. Unsupervised: find structure with no labels (cluster these customers). Self-supervised: manufacture the labels from the data itself — hide the next word and make the model predict it, so every sentence ever written becomes free training data with no annotator involved. That third trick is the unlock behind large language models: it converted the entire internet into a supervised dataset of effectively infinite size.`},
+{t:'Reinforcement learning (RL)',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Learning Fundamentals',q:`Learning from reward signals through trial and error, not examples`,d:`Learning by acting: an agent tries things, receives rewards or penalties, and adjusts toward whatever earns more — no labeled examples, just consequences. It powered the game-playing landmarks (AlphaGo's move 37, learned from self-play rather than human games) and now sits inside language model training twice: RLHF uses human preferences as the reward, and newer reasoning models train against automatically checkable rewards (did the math answer verify? did the code pass tests?). Its classic failure mode is specification gaming — agents maximizing the literal reward in ways the designer never intended — which makes it both the most powerful and most alignment-relevant training paradigm.`},
+{t:'Embeddings',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Representation & Data',q:`Meaning encoded as coordinates; similar things sit near each other`,d:`The representation trick underneath modern AI: words, sentences, images, users — anything — mapped to lists of numbers (vectors) such that semantic similarity becomes geometric closeness. "King" sits near "queen"; a support ticket sits near tickets about the same problem regardless of wording. This is how search moved beyond keywords, how recommendation systems represent taste, and how RAG retrieves relevant documents. The famous vector arithmetic (king − man + woman ≈ queen) is the party-trick demonstration that meaning really did become geometry.`},
+{t:'Training data & the corpus',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Representation & Data',q:`The trillions of tokens a model learns from; quality is destiny`,d:`The raw material: for frontier language models, trillions of tokens of web text, books, code, and papers — filtered, deduplicated, and weighted, because data quality moves capability as much as scale does. Everything about a model's knowledge and blind spots traces here: its knowledge cutoff, its biases, its fluency in Python versus a low-resource language. The strategic layer: high-quality text is finite ("the data wall"), which drives licensing deals, synthetic data generation, and litigation over what training on copyrighted text legally is — the industry's defining resource fight.`},
+{t:'Bias-variance tradeoff',c:'Artificial Intelligence',g:'Foundations & Learning',sg:'Representation & Data',q:`Too simple misses the pattern; too flexible fits the noise`,d:`The classical dial of statistical learning: models too simple to capture the real pattern err systematically (high bias — fitting a line to a curve), while models flexible enough to fit anything fit the noise too (high variance — a new sample gives a wildly different answer). Classic practice hunted the sweet spot between them. The modern wrinkle: enormous neural networks violate the textbook curve — past a threshold, adding parameters improves generalization again ("double descent"), one of several places where deep learning empirically outran the theory meant to explain it.`},
+
+/* ---------- AI: Architectures & Training ---------- */
+{t:'Transformer',c:'Artificial Intelligence',g:'Architectures & Training',sg:'The Transformer',q:`The 2017 architecture behind every modern frontier model`,d:`The architecture from Google's 2017 paper "Attention Is All You Need" that underlies GPT, Claude, Gemini, and essentially every frontier model. Its predecessors read text sequentially, word by word, which throttled both long-range understanding and — critically — parallel computation. The transformer processes every token simultaneously, relating each to all the others through attention. That parallelism is the historical hinge: it let training saturate thousands of GPUs at once, which made scaling laws exploitable, which made the entire modern era possible. The architecture won less because it was clever than because it was scalable.`},
+{t:'Attention mechanism',c:'Artificial Intelligence',g:'Architectures & Training',sg:'The Transformer',q:`Every token learns which other tokens matter for interpreting it`,d:`The transformer's core operation: for each token, compute relevance scores against every other token in the context, then blend information from the relevant ones. In "the dog chased its tail because it was excited," attention is what lets "it" look back and bind to "dog." Mechanically it's queries, keys, and values — each token asks a question, every token advertises what it holds, and matches get mixed together — run in parallel across many "heads" that each learn different relationship types (syntax, coreference, rhyme). Its cost grows with the square of context length, which is why long context windows were an engineering war.`},
+{t:'Token & tokenization',c:'Artificial Intelligence',g:'Architectures & Training',sg:'The Transformer',q:`The subword chunks models actually read, count, and charge by`,d:`Models don't read letters or words — they read tokens, subword chunks from a fixed vocabulary ("understanding" might split into "under" + "standing"; common words are single tokens; rare ones fragment). Roughly ¾ of an English word each, on average. This is the unit of everything practical: context windows are measured in them, API pricing is billed per thousand of them, and generation speed is quoted in them per second. It also explains characteristic failures — models historically stumbled counting letters in "strawberry" because they never saw letters, only chunks.`},
+{t:'Context window',c:'Artificial Intelligence',g:'Architectures & Training',sg:'The Transformer',q:`The model's working memory; everything outside it doesn't exist`,d:`The maximum tokens a model can consider at once — its working memory. Everything you want it to use must fit inside: the conversation, the documents, the instructions. Nothing persists between sessions; a model doesn't "remember" yesterday unless yesterday is re-fed into today's window. Grew from ~2K tokens (GPT-3) to millions, an engineering war against attention's quadratic cost. The practical craft of context management — what to include, what to summarize, what to retrieve on demand — is half of building anything real on these models, and the reason RAG exists.`},
+{t:'Autoregression / next-token prediction',c:'Artificial Intelligence',g:'Architectures & Training',sg:'The Transformer',q:`Generating one token at a time, each conditioned on all before it`,d:`How language models generate: predict a probability distribution over the next token, emit one, append it, repeat — every output built one piece at a time, each conditioned on everything before. This single objective is what pretraining optimizes, and the profound surprise of the era is what fell out of it: predicting the next token of the whole internet well enough apparently requires internalizing grammar, facts, reasoning patterns, and style. Also the root of practical quirks — commit to a wrong early token and the model plows onward, which is part of why asking it to "think step by step" first changes the answer.`},
+{t:'Temperature & sampling',c:'Artificial Intelligence',g:'Architectures & Training',sg:'The Transformer',q:`The dial controlling how randomly the model picks its next token`,d:`The model outputs probabilities; sampling decides how to pick. Temperature 0 always takes the most likely token — maximally consistent, useful for extraction and code. Higher temperatures flatten the distribution, admitting less-likely choices — more varied and creative, more error-prone. Related knobs (top-p, top-k) trim the candidate pool before sampling. Two practical corollaries: the same prompt legitimately yields different answers on different runs, and "the model said X" is a sample from a distribution, not the model's single fixed opinion.`},
+{t:'Pretraining',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`The massive first phase: compress the internet into weights`,d:`The first and overwhelmingly largest phase of building a model: months of next-token prediction over trillions of tokens on thousands of GPUs, costing hundreds of millions of dollars, distilling the statistical structure of human knowledge into the weights. The output is a "base model" — staggeringly knowledgeable and nearly useless as a product: ask it a question and it may continue with more questions, since all it knows is "continue the document." Capability is born here; usefulness comes later. When labs tout a new model generation, the pretraining run is the moonshot they're referring to.`},
+{t:'Post-training (fine-tuning & instruction tuning)',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`The second phase that turns a text predictor into an assistant`,d:`Everything after pretraining that turns a raw text-completer into a product: supervised fine-tuning on example dialogues (teaching the assistant format), instruction tuning (teaching it to follow directions), RLHF (teaching it preferences), and safety training. A tiny fraction of the compute, a huge fraction of the perceived quality — most of what distinguishes one lab's model "personality" from another's is made here, not in pretraining. The same term covers customizing: companies fine-tune open models on their own data to specialize them, the cheap end of the same machinery.`},
+{t:'RLHF (Reinforcement Learning from Human Feedback)',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`Humans rank outputs; a reward model scales their taste; RL optimizes it`,d:`The technique that made chatbots usable: humans rank pairs of model outputs (which answer is better?), a "reward model" is trained to predict those judgments, and the language model is then optimized via reinforcement learning against that learned reward. Human taste, bottled and scaled. It's why models are helpful, refuse harmful requests, and apologize — none of that is in the internet's raw statistics. Its known pathologies matter too: optimizing for "what raters prefer" breeds sycophancy and confident-sounding hedging, a live case of Goodhart's law inside the training pipeline itself.`},
+{t:'Scaling laws',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`Loss falls predictably with compute, data, and parameters; the bet behind the buildout`,d:`The empirical regularity that model performance improves smoothly and predictably as you scale compute, data, and parameters — straight lines on log-log plots, holding across many orders of magnitude. Chinchilla (2022) refined the recipe: most models were oversized and undertrained; data and parameters should scale together. This is the economic engine of the entire AI buildout: labs spend billions on the next training run not on faith but because the curve has, so far, kept its promises. Every "data wall" and "scaling is hitting limits" debate is an argument about whether it continues — and reasoning models opened a second axis: scaling compute at inference time, not just training time.`},
+{t:'Emergent capabilities',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`Abilities that appear abruptly at scale without being trained for`,d:`Abilities that seem to appear suddenly at scale rather than improving smoothly — arithmetic, translation, multi-step reasoning showing up in larger models without being explicitly trained. The claim is contested: some argued the "jumps" are artifacts of all-or-nothing metrics over smoothly improving internals. The debate matters beyond academia because it's really about predictability: if capabilities emerge unannounced, the next training run may surface abilities (or risks) nobody forecast — the core empirical question underneath frontier-model safety policy and staged deployment.`},
+{t:'Mixture of Experts (MoE)',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`A huge model where only a few expert subnetworks fire per token`,d:`An architecture holding many "expert" subnetworks with a router activating only a few per token — so a model can have, say, hundreds of billions of total parameters while spending the compute of a much smaller one on any given step. Storage capacity decoupled from running cost. Most frontier models are now built this way, which is why "parameter count" quietly stopped being a comparable spec: a dense 70B and a sparse 400B-total model may cost similar compute per token. The economics — more knowledge per inference dollar — made it the industry default.`},
+{t:'Distillation & quantization',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`Shrinking models: a student learns from a teacher; weights get compressed`,d:`The two great compression levers. Distillation: train a small "student" model to imitate a large "teacher's" outputs — the student learns from the teacher's rich probability distributions, capturing much of the capability at a fraction of the size. Quantization: store weights in lower precision (8-bit or 4-bit instead of 16), shrinking memory and speeding inference with modest quality loss. Together they're why capable models now run on laptops and phones, why every flagship has cheaper sibling tiers, and why "distilled from a frontier model's outputs" is both a standard practice and a recurring terms-of-service fight.`},
+{t:'Compute, FLOPs & GPUs',c:'Artificial Intelligence',g:'Architectures & Training',sg:'Training Pipeline & Scale',q:`The physical substrate: chips, datacenters, and power as strategic resources`,d:`The physical economy underneath the math. Training is measured in FLOPs (floating-point operations) — frontier runs now exceed 10²⁵ of them — executed on GPUs, chips built for massively parallel arithmetic, of which NVIDIA sells the overwhelming majority (the moat is as much CUDA software as silicon). Compute is the industry's scarce strategic resource: access to chips shapes who can compete, export controls on them are geopolitical policy, and datacenter power draw has made electricity a gating input. For a finance reader this is the capex supercycle: the hundreds of billions flowing through NVIDIA, TSMC, hyperscaler budgets, and utilities is this term, monetized.`},
+
+/* ---------- AI: Deployment, Agents & Frontier ---------- */
+{t:'Inference',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Models in Production',q:`Running the trained model; where the marginal costs live`,d:`Using a trained model — weights frozen, no learning, just the forward computation producing tokens. The economics inverted the software playbook: traditional software has near-zero marginal cost, but every model response burns real GPU time and electricity, so unit economics returned to tech. Serving efficiently (batching, caching, quantization, cheaper distilled tiers) is a core competitive discipline, and the training-versus-inference split structures the industry: training is a huge fixed cost paid once per model; inference is the recurring cost that scales with usage — and with reasoning models that "think" longer for better answers, inference became a quality dial too.`},
+{t:'Prompting & in-context learning',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Models in Production',q:`Steering a frozen model through what you put in its window`,d:`The discovery that a trained model can be steered entirely through its input: give instructions, show a few examples ("few-shot"), or demand step-by-step reasoning ("chain of thought"), and behavior changes dramatically — no weights updated, the model adapting on the fly from patterns in the window. This made natural language the new programming interface. The craft has professionalized into context engineering: system prompts, structured examples, and retrieved documents assembled programmatically. The deeper point: much of a model's latent capability is unlocked or wasted purely by how it's asked.`},
+{t:'RAG (Retrieval-Augmented Generation)',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Models in Production',q:`Fetch relevant documents first, then let the model answer from them`,d:`The standard pattern for grounding a model in knowledge it wasn't trained on: embed a document corpus into vectors, retrieve the passages most relevant to the user's question, stuff them into the context window, and instruct the model to answer from them. It's how assistants answer from your company's wiki, fresh news, or filings past their training cutoff — and it converts "confabulate from memory" into "read then answer," cutting hallucination and enabling citations. The failure modes migrate rather than vanish: bad retrieval means confident answers grounded in the wrong passages.`},
+{t:'Hallucination',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Models in Production',q:`Fluent, confident output that is simply false`,d:`Confident, fluent fabrication: citations that don't exist, biographies subtly wrong, court cases invented (as sanctioned lawyers discovered). The cause is structural, not a bug: the model is trained to produce plausible text, and plausibility only correlates with truth — where its knowledge thins, it interpolates with the same fluent confidence, because next-token prediction never learned to say "I don't know" unless taught to. Mitigations (RLHF for honesty, RAG grounding, verification) reduce but haven't eliminated it. The professional stance: treat unverified model output as a smart colleague's recollection — probably right, never load-bearing without checking.`},
+{t:'AI agents',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Models in Production',q:`Models in a loop with tools, pursuing goals across many steps`,d:`A model wrapped in a loop with tools: it reads a goal, decides an action (search, run code, call an API, edit a file), observes the result, and iterates until done — crossing from answering questions to performing work. The frontier of commercial deployment (coding agents being the breakout case) and the frontier of difficulty: errors compound across steps, so a 95%-reliable step becomes coin-flip reliability by step fourteen. Long-horizon reliability, not raw intelligence, is the current bottleneck — and the safety questions (what authority does an autonomous loop get, and what can it be tricked into?) get sharper exactly as capability rises.`},
+{t:'Multimodality',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Models in Production',q:`One model handling text, images, audio, and video natively`,d:`Models that consume and produce multiple modalities — reading charts and screenshots, hearing and speaking, generating images and video — by encoding everything into the same token-like representations a transformer already processes. Practically transformative: a model that reads a PDF's tables and figures, watches a screen, or discusses a photo dissolves the boundary between "language model" and general interface. The direction of travel is native multimodality (one model trained jointly on everything) over bolted-together pipelines, and it's what makes "computer use" agents — models operating software by looking at the screen — possible at all.`},
+{t:'Evals & benchmarks',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Safety, Evals & The Industry',q:`How capability gets measured, gamed, and argued about`,d:`The measurement layer: standardized tests (math, coding, reasoning, knowledge) plus head-to-head human preference arenas, by which models are compared and marketing claims made. Chronic diseases: contamination (test questions leaking into training data — acing the exam it memorized), saturation (frontier models max out benchmarks, forcing new harder ones), and Goodhart dynamics (labs optimizing for the leaderboard rather than the capability it proxied). Real-world task evals and private held-out suites are the countermeasures. Reading AI announcements skeptically starts here — "state of the art on X" invites the same scrutiny as a fund's cherry-picked track record.`},
+{t:'Alignment',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Safety, Evals & The Industry',q:`Making models actually pursue what humans intend, not just the proxy`,d:`The problem of making AI systems robustly do what humans intend — distinct from making them capable. The gap it names: models optimize the objective you specified, not the one you meant (specification gaming), and RLHF-era symptoms like sycophancy are mild previews of proxy-objective divergence. Techniques in production include RLHF, constitutional AI (training against written principles), and red-teaming; research frontiers include scalable oversight — how humans supervise systems more capable than themselves. It ranges from immediate product concerns (refusals, jailbreaks) to the long-horizon question of controlling systems smarter than their overseers, and it's why frontier labs publish safety frameworks alongside capability announcements.`},
+{t:'Interpretability',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Safety, Evals & The Industry',q:`Opening the black box to see what the weights actually compute`,d:`The science of understanding what's happening inside the weights — reverse-engineering the black box. Mechanistic interpretability has found real structure: individual "features" encoding concepts (one famously activating on the Golden Gate Bridge), circuits implementing algorithms, and evidence that models plan ahead rather than merely predicting word-by-word. Why it matters beyond curiosity: you can't fully trust what you can't inspect — interpretability is the eventual audit function for AI, the difference between "the model says it's being honest" and "we checked." Still early: current tools explain slivers of small models, not frontier systems end to end.`},
+{t:'Open vs. closed weights',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Safety, Evals & The Industry',q:`Whether the trained model itself is downloadable or API-only`,d:`The industry's structural divide: closed models (GPT, Claude, Gemini) accessible only through APIs, weights guarded as crown jewels — versus open-weight models (Llama, Mistral, DeepSeek) anyone can download, run, and fine-tune. Note the precision: "open weights" ≠ open source — the training data and code usually stay private. The economics echo platforms versus commodities: closed labs sell capability at a margin; open releases commoditize the layer beneath rivals and monetize elsewhere. The safety debate mirrors it — releasing weights is irreversible and uncontrollable downstream, which is either the point (no gatekeepers) or the risk, depending on who's arguing. DeepSeek's 2025 releases made this a geopolitical story too.`},
+{t:'Frontier model & the road to AGI',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Safety, Evals & The Industry',q:`The most capable current systems, and the contested destination`,d:`"Frontier model" is the working term for the most capable systems of the moment — the ones defining the edge, triggering regulatory thresholds (compute-based reporting rules), and costing the most to train. AGI — artificial general intelligence, systems matching or exceeding humans across most cognitive work — is the contested destination: definitions vary from "economically transformative automation" to philosophical thresholds, and timelines from years to decades, with serious people at both ends. The financially literate frame: trillions in capex, valuations, and national policy are already priced off beliefs about this trajectory — making "what do you think AGI means and when" the rare philosophical question with a live market position attached.`},
+{t:'AI economics (the business of models)',c:'Artificial Intelligence',g:'Deployment, Agents & Frontier',sg:'Safety, Evals & The Industry',q:`Capex-heavy training, per-token margins, and the value-capture question`,d:`The industry through a finance lens. Cost structure: training is enormous fixed capex (a frontier run: hundreds of millions and rising), inference is real marginal cost — so labs price per token and chase serving efficiency for gross margin. The stack: chips (NVIDIA/TSMC) → cloud compute (hyperscalers) → models (labs) → applications; the live question is which layer captures durable value, with the picks-and-shovels layer the unambiguous winner so far. Moats are contested — models depreciate fast as rivals catch up, open weights commoditize from below, and switching costs are thin — which is why distribution, proprietary data, and enterprise trust get argued as the real long-term differentiators. Rhymes deliberately with railroads, telecom, and the fiber buildout: transformative technology, ferocious capex, and no guarantee the builders keep the profits.`},
 ];
 
 /* ============================== state ============================== */
@@ -851,7 +1045,7 @@ let state={ terms:[], resources:[], progress:{}, view:'library', scope:'all', qu
 function seedTerms(){
   return SEED.map(s=>({ id:slug(s.t)||uid(), term:s.t, def:s.d, q:s.q||'', category:s.c, group:s.g, sg:s.sg||s.g }));
 }
-const SEED_VERSION=5;
+const SEED_VERSION=6;
 async function migrateSeed(){
   const v=await Store.get('seedVersion')||1;
   if(v>=SEED_VERSION) return;
@@ -872,7 +1066,7 @@ function maskDef(t){
     const safe=w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
     d=d.replace(new RegExp('\\b'+safe+'\\w*','gi'),'___');
   });
-  if(d.length>240) d=d.slice(0,240).replace(/\s\S*$/,'')+'\u2026';
+  if(d.length>240) d=d.slice(0,240).replace(/\s\S*$/,'')+'…';
   return d;
 }
 function clue(t){ return (t.q&&t.q.trim())? t.q : maskDef(t); }
@@ -930,6 +1124,9 @@ const SCHEMA={
  'Street Jargon & Shorthand':'What does the desk actually say, and what does it really mean?',
  'Macro, Rates & Policy':'What moves the whole board: the Fed, the data, the price of money?',
  'Economic Principles & Behavior':'What are the underlying laws of incentives, markets, and human error?',
+ 'Foundations & Learning':'How does a machine actually learn anything from data?',
+ 'Architectures & Training':'What is a transformer, and how does a frontier model get built?',
+ 'Deployment, Agents & Frontier':'How do models behave in the wild, and what does the industry fight about?',
 };
 
 async function init(){
@@ -964,7 +1161,7 @@ function termsInScope(){
 
 /* ============================== render: shell ============================== */
 function render(){
-  $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.view===state.view));
+  $$('#tabs button, #bottomnav button').forEach(b=>b.classList.toggle('on',b.dataset.view===state.view));
   const m=$('#main');
   if(state.view==='library') m.innerHTML=viewLibrary();
   else if(state.view==='study') m.innerHTML=viewStudy();
@@ -990,15 +1187,37 @@ function viewLibrary(){
     idx+=`</div>`;
   });
 
+  /* mobile chip rails */
+  let rail=`<div class="chiprail"><button class="chip2 ${state.scope==='all'?'on':''}" data-scope="all">All · ${state.terms.length}</button>`;
+  cats.forEach(cat=>{
+    const on=state.scope!=='all'&&state.scope.split('||')[0]===cat;
+    rail+=`<button class="chip2 ${on?'on':''}" data-scope="${esc(cat)}||*">${esc(cat)}</button>`;
+  });
+  rail+=`</div>`;
+  let rail2='';
+  if(state.scope!=='all'){
+    const c=state.scope.split('||')[0];
+    const gs=groupsFor(c);
+    if(gs.length>1){
+      rail2=`<div class="chiprail sub"><button class="chip2 ${state.scope===c+'||*'?'on':''}" data-scope="${esc(c)}||*">All ${esc(c)}</button>`+
+        gs.map(g=>{
+          const sc=c+'||'+g;
+          return `<button class="chip2 ${state.scope===sc?'on':''}" data-scope="${esc(sc)}">${esc(g)}</button>`;
+        }).join('')+`</div>`;
+    }
+  }
+
   const arr=termsInScope();
   let title='All terms', eyebrow='Library', desc='Your full corpus. Browse by concept on the left, or search up top.';
   if(state.scope!=='all'){ const [c,g]=state.scope.split('||'); eyebrow=c; title=g==='*'?c:g; desc=g==='*'?'Every concept group in '+c+'.':''; }
   if(state.query){ eyebrow='Search'; title='“'+state.query+'”'; desc=arr.length+' match'+(arr.length===1?'':'es')+'.'; }
+  const schemaQ=SCHEMA[state.scope!=='all'&&state.scope.split('||')[1]!=='*'?state.scope.split('||')[1]:''];
 
   let cards=arr.map(t=>termCard(t)).join('');
   if(!arr.length) cards=`<div class="empty"><div class="big">Nothing here yet</div>${state.query?'No terms match your search.':'Add your first term to this group.'}</div>`;
 
   return `
+  ${rail}${rail2}
   <div class="lib">
     <aside class="index" id="indexPanel">
       <h4>Concept map</h4>
@@ -1009,10 +1228,9 @@ function viewLibrary(){
         <div>
           <div class="eyebrow">${esc(eyebrow)}</div>
           <h2>${esc(title)}</h2>
-          ${desc?`<p>${esc(desc)}</p>`:''}
+          ${schemaQ?`<p class="schemaline" style="margin-top:6px">“${esc(schemaQ)}”</p>`:(desc?`<p>${esc(desc)}</p>`:'')}
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn ghost sm menubtn" id="menuToggle">☰ Map</button>
           <button class="btn sm" id="addTerm">+ Add term</button>
         </div>
       </div>
@@ -1037,6 +1255,7 @@ function termCard(t){
 
 /* ============================== view: study (flashcards) ============================== */
 let deck={cards:[],i:0,flipped:false};
+let lastSwipe=0;
 function buildScopeOptions(sel){
   let o=`<option value="all">All terms (${state.terms.length})</option>`;
   categories().forEach(cat=>{
@@ -1098,7 +1317,7 @@ function viewReview(){
   return `
   <div class="flashwrap">
     ${modeBar()}
-    <div class="deckmeta"><span class="duebadge">${rev.dueN} due \u00b7 ${rev.newN} new</span> &nbsp; Card ${rev.i+1} of ${rev.cards.length} ${isNew?'\u00b7 <span style="color:var(--accent)">NEW</span>':''}</div>
+    <div class="deckmeta"><span class="duebadge">${rev.dueN} due · ${rev.newN} new</span> &nbsp; Card ${rev.i+1} of ${rev.cards.length} ${isNew?'· <span style="color:var(--accent)">NEW</span>':''}</div>
     <div class="progbar"><i style="width:${pct}%"></i></div>
     <div class="flash ${rev.flipped?'flip':''}" id="flash">
       <div class="flashinner">
@@ -1132,25 +1351,25 @@ function viewBrowse(){
   const c=deck.cards[deck.i];
   const cr=coreOf(c.def);
   const pct=Math.round(((deck.i)/total)*100);
-  const schema=SCHEMA[state.scope&&state.scope.indexOf('g:')===0?state.scope.slice(2):''];
+  const schema=SCHEMA[state.scope!=='all'&&state.scope.split('||')[1]!=='*'?state.scope.split('||')[1]:''];
   return `
   <div class="flashwrap">
     ${modeBar()}
     <div class="scopebar">
       <label>Deck</label>
       <select id="deckScope">${buildScopeOptions(state.scope)}</select>
-      <button class="btn ghost sm" id="reshuffle">\u21bb Shuffle</button>
+      <button class="btn ghost sm" id="reshuffle">↻ Shuffle</button>
     </div>
-    ${schema?`<div class="schemaline">\u201c${esc(schema)}\u201d</div>`:''}
-    <div class="deckmeta">Card ${deck.i+1} of ${total}</div>
+    ${schema?`<div class="schemaline">“${esc(schema)}”</div>`:''}
+    <div class="deckmeta">Card ${deck.i+1} of ${total} · swipe to move</div>
     <div class="progbar"><i style="width:${pct}%"></i></div>
     <div class="flash ${deck.flipped?'flip':''}" id="flash">
       <div class="flashinner">
         <div class="face front">
           <div class="lab">Term</div>
           <h2>${esc(c.term)}</h2>
-          <div class="grouptag">${esc(c.category)} \u00b7 ${esc(c.group)}</div>
-          <div class="hint">Click to reveal definition</div>
+          <div class="grouptag">${esc(c.category)} · ${esc(c.group)}</div>
+          <div class="hint">Tap to reveal definition</div>
         </div>
         <div class="face back">
           <div class="bk-scroll">
@@ -1163,9 +1382,9 @@ function viewBrowse(){
       </div>
     </div>
     <div class="deckctrl">
-      <button class="btn ghost sm" id="prevCard">\u2190 Prev</button>
-      <div class="mid"><span class="duebadge">reference mode \u2014 grading lives in Daily review</span></div>
-      <button class="btn ghost sm" id="nextCard">Next \u2192</button>
+      <button class="btn ghost sm" id="prevCard">← Prev</button>
+      <div class="mid"><span class="duebadge">reference mode — grading lives in Daily review</span></div>
+      <button class="btn ghost sm" id="nextCard">Next →</button>
     </div>
   </div>`;
 }
@@ -1266,16 +1485,16 @@ const PAIRS=[
  {x:'Defined under the Investment Company Act of 1940',k:'b'},
  {x:'Exists to gate access to private, unregistered offerings',k:'both'}]},
 {a:'GP (General Partner)',b:'LP (Limited Partner)',s:[
- {x:'Bears unlimited liability for the fund\u2019s obligations',k:'a'},
+ {x:'Bears unlimited liability for the fund’s obligations',k:'a'},
  {x:'Supplies most of the capital but has no say in daily decisions',k:'b'},
- {x:'Earns carried interest on the fund\u2019s profits',k:'a'},
+ {x:'Earns carried interest on the fund’s profits',k:'a'},
  {x:'Liability is capped at the amount committed',k:'b'},
  {x:'Signs the Limited Partnership Agreement',k:'both'}]},
 {a:'Management fee',b:'Performance fee (incentive fee)',s:[
  {x:'Charged whether or not the fund makes money',k:'a'},
  {x:'Typically calculated as a percentage of profits',k:'b'},
  {x:'Usually subject to a high watermark',k:'b'},
- {x:'The \u201c2\u201d in \u201c2 and 20\u201d',k:'a'},
+ {x:'The “2” in “2 and 20”',k:'a'},
  {x:'Compensates the manager rather than the investors',k:'both'}]},
 {a:'American waterfall (deal-by-deal)',b:'European waterfall (whole-fund)',s:[
  {x:'GP can take carry after each individual exit',k:'a'},
@@ -1287,14 +1506,14 @@ const PAIRS=[
  {x:'Sensitive to how quickly money comes back',k:'a'},
  {x:'Completely ignores the time value of money',k:'b'},
  {x:'Can be flattered by early distributions or subscription lines',k:'a'},
- {x:'Answers \u201chow many times did we multiply our money?\u201d',k:'b'},
+ {x:'Answers “how many times did we multiply our money?”',k:'b'},
  {x:'Used to judge private fund performance',k:'both'}]},
 {a:'Alpha',b:'Beta',s:[
  {x:'The return you could replicate with a cheap index fund',k:'b'},
  {x:'Evidence of genuine manager skill',k:'a'},
  {x:'Measures sensitivity to overall market moves',k:'b'},
  {x:'Gets scarcer as markets become more efficient',k:'a'},
- {x:'A component of a portfolio\u2019s total return',k:'both'}]},
+ {x:'A component of a portfolio’s total return',k:'both'}]},
 {a:'Hedge fund',b:'Private equity (PE)',s:[
  {x:'Typically trades liquid securities that can be sold daily',k:'a'},
  {x:'Locks up capital for roughly a decade',k:'b'},
@@ -1323,14 +1542,26 @@ const PAIRS=[
  {x:'The total return a bond pays relative to its price',k:'a'},
  {x:'Measured as extra compensation over a risk-free benchmark',k:'b'},
  {x:'Widens when credit risk rises even if Treasuries are flat',k:'b'},
- {x:'Falls when the bond\u2019s price rises',k:'a'},
+ {x:'Falls when the bond’s price rises',k:'a'},
  {x:'Quoted in the language of fixed income',k:'both'}]},
 {a:'DPI (Distributed to Paid-In)',b:'TVPI (Total Value to Paid-In)',s:[
  {x:'Counts only cash actually returned to LPs',k:'a'},
  {x:'Includes unrealized value still sitting in the portfolio',k:'b'},
- {x:'Can\u2019t be inflated by optimistic markups',k:'a'},
+ {x:'Can’t be inflated by optimistic markups',k:'a'},
  {x:'Converges toward the other as a fund winds down',k:'b'},
  {x:'Expressed as a multiple of contributed capital',k:'both'}]},
+{a:'Pretraining',b:'Post-training (fine-tuning & RLHF)',s:[
+ {x:'Consumes the overwhelming majority of the compute budget',k:'a'},
+ {x:'Turns a raw text predictor into a helpful assistant',k:'b'},
+ {x:'Where the model absorbs most of its knowledge about the world',k:'a'},
+ {x:'Uses human preference rankings as a training signal',k:'b'},
+ {x:'Updates the model’s weights',k:'both'}]},
+{a:'Training',b:'Inference',s:[
+ {x:'Happens once per model version, at enormous upfront cost',k:'a'},
+ {x:'Runs every single time a user sends a prompt',k:'b'},
+ {x:'Its cost scales directly with how many people use the product',k:'b'},
+ {x:'The weights are frozen while it happens',k:'b'},
+ {x:'Runs on specialized accelerators like GPUs',k:'both'}]},
 ];
 let drill=null;
 function startDrill(pi){
@@ -1342,7 +1573,7 @@ function viewDrill(){
     const pct=Math.round(drill.score/drill.items.length*100);
     return `<div class="card results" style="margin-top:16px">
       <div class="score">${pct}%</div>
-      <div class="sub">${drill.score} of ${drill.items.length} \u2014 ${esc(drill.a)} vs. ${esc(drill.b)}</div>
+      <div class="sub">${drill.score} of ${drill.items.length} — ${esc(drill.a)} vs. ${esc(drill.b)}</div>
       <div style="margin-top:20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
         <button class="btn" id="drillAgain">Same pair again</button>
         <button class="btn ghost" id="drillNew">New pair</button>
@@ -1358,9 +1589,9 @@ function viewDrill(){
     <div class="scoreline"><span>Statement ${drill.i+1} / ${drill.items.length}</span><span>Score ${drill.score}</span></div>
     <div class="progbar"><i style="width:${Math.round(drill.i/drill.items.length*100)}%"></i></div>
     <div class="q-prompt">Which does this describe?</div>
-    <div class="q-body">\u201c${esc(it.x)}\u201d</div>
+    <div class="q-body">“${esc(it.x)}”</div>
     <div class="opts">${btn('a',drill.a)}${btn('both','Both')}${btn('b',drill.b)}</div>
-    ${drill.answered?`<button class="btn" id="drillNext" style="width:100%;justify-content:center;margin-top:18px">${drill.i+1<drill.items.length?'Next \u2192':'See results'}</button>`:''}
+    ${drill.answered?`<button class="btn" id="drillNext" style="width:100%;justify-content:center;margin-top:18px">${drill.i+1<drill.items.length?'Next →':'See results'}</button>`:''}
   </div>`;
 }
 /* ============================== view: compare ============================== */
@@ -1373,7 +1604,6 @@ function viewCompare(){
       const t=state.terms.find(x=>x.id===id); if(!t)return'';
       return `<div class="cmp-col card"><div class="grouptag">${esc(t.category)} · ${esc(t.group)}</div><h3>${esc(t.term)}</h3><div class="def">${esc(t.def)}</div></div>`;
     }).join('')+`</div>`;
-    // related: same group, not already picked
     const base=state.terms.find(x=>x.id===cmp.ids[cmp.ids.length-1]);
     if(base){
       const rel=state.terms.filter(t=>t.group===base.group&&!cmp.ids.includes(t.id)).slice(0,8);
@@ -1384,8 +1614,8 @@ function viewCompare(){
   }
   const pairOpts=PAIRS.map((p,i)=>`<option value="${i}">${esc(p.a)} vs. ${esc(p.b)}</option>`).join('');
   const drillUI = drill? viewDrill() : `<div class="card" style="margin-top:16px">
-      <div class="eyebrow">Boundary drill</div>
-      <p style="margin:6px 0 12px;color:var(--muted);font-size:14px">Two confusable terms. Sort each statement: does it describe A, B, or both? This tests the edges where similar concepts differ.</p>${leeches().length?`<p style="margin:0 0 12px;font-size:13px;color:var(--warn)">Your leeches: <strong>${leeches().slice(0,4).map(t=>esc(t.term)).join(', ')}</strong> \u2014 pick the pair closest to them.</p>`:''}
+      <div class="eyebrow" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)">Boundary drill</div>
+      <p style="margin:6px 0 12px;color:var(--muted);font-size:14px">Two confusable terms. Sort each statement: does it describe A, B, or both? This tests the edges where similar concepts differ.</p>${leeches().length?`<p style="margin:0 0 12px;font-size:13px;color:var(--warn)">Your leeches: <strong>${leeches().slice(0,4).map(t=>esc(t.term)).join(', ')}</strong> — pick the pair closest to them.</p>`:''}
       <div class="row2">
         <div class="field"><label>Pair</label><select id="drillPair">${pairOpts}</select></div>
         <div class="field" style="display:flex;align-items:flex-end"><button class="btn" id="drillStart" style="width:100%;justify-content:center">Start drill</button></div>
@@ -1431,14 +1661,17 @@ function viewResources(){
 /* ============================== auto-categorization ============================== */
 const CAT_KEYWORDS=[
  ['Finance','Markets & Trading',['ipo','exchange','order','trading','trade','ticker','index','etf','listed','listing','stock market','shares','float','volume','bid','ask','quote','market maker','broker','nyse','nasdaq','intraday','offering','block','margin call','tape','underwrit']],
- ['Finance','Accounting & Business Quality',['revenue','earnings','income statement','balance sheet','cash flow','margin','gaap','audit','accrual','depreciation','amortization','expense','10-k','10-q','filing','footnote','inventory','receivable','goodwill','impairment','capex','working capital','ebitda','bookkeep','ledger','restat','mark-to-market','fair value','segment','backlog','run-rate','pro forma','saas',' arr','churn','burn','runway','retention','cac','ltv']],
- ['Finance','Valuation & Deals',['valuation','multiple','dcf','discounted cash','intrinsic value','comps','precedent','terminal value','wacc','merger','acquisition','m&a','deal','lbo','buyout','synergy','accretion','dilution','takeover','tender','spin-off','buyback','sum-of-the-parts','enterprise value','banker','roadshow','league table','bulge']],
+ ['Finance','Accounting & Business Quality',['revenue','earnings','income statement','balance sheet','cash flow','margin','gaap','audit','accrual','depreciation','amortization','expense','10-k','10-q','filing','footnote','inventory','receivable','goodwill','impairment','capex','working capital','ebitda','bookkeep','ledger','restat','mark-to-market','fair value','segment','backlog','run-rate','pro forma','saas',' arr','churn','burn','runway','retention','cac','ltv','moat']],
+ ['Finance','Valuation & Deals',['valuation','multiple','dcf','discounted cash','intrinsic value','comps','precedent','terminal value','wacc','merger','acquisition','m&a','deal','lbo','buyout','synergy','accretion','dilution','takeover','tender','spin-off','buyback','sum-of-the-parts','enterprise value','banker','roadshow','league table','bulge','spac']],
  ['Finance','Fixed Income, Credit & Derivatives',['bond','yield','coupon','credit','debt','loan','lender','borrower','duration','maturity','option','swap','futures','forward contract','derivative','strike','default','treasury','fixed income','spread','covenant','tranche','securitiz','collateral','convertible','warrant','repo','basis point','notional','hedging','implied volatility','seniority','junk','investment grade','underlying','expiration','exercise','payoff','straddle','strangle','strike']],
  ['Finance','Funds: Structures, Access & Economics',['fund structure','limited partner','general partner',' lp ',' gp ','management fee','performance fee','carried interest','carry','waterfall','hurdle','high watermark','redemption','subscription','lock-up','gate','accredited','qualified purchaser','qib','regulation d','40 act','investment company act','feeder','master fund','spv','side pocket','nav','vehicle','mutual fund','interval fund','closed-end']],
- ['Finance','Hedge Funds & Private Markets',['hedge fund','private equity','venture capital','vc ','startup','portfolio company','secondaries','secondary market for','activist','long/short','merger arb','event-driven','global macro fund','quant fund','distressed','pod','multi-strategy','prime broker','sponsor','roll-up','platform','bolt-on','dry powder','capital call','vintage','unicorn','13f','crowded']],
- ['Finance','Portfolio, Risk & Performance',['portfolio','sharpe','sortino','alpha','beta','benchmark','tracking error','drawdown','correlation','diversif','volatility','value at risk','var','risk-adjusted','irr','moic','dpi','tvpi','rebalanc','allocation','tail risk','efficient frontier','information ratio']],
- ['Economics','Macro, Rates & Policy',['fed','federal reserve','inflation','gdp','unemployment','central bank','monetary','fiscal','recession','cpi','pce','fomc','rate hike','rate cut','yield curve','quantitative','stimulus','deficit','labor market','payroll','economy-wide','dollar index','currency','exchange rate','carry trade','money supply','jobless','pmi','housing start']],
- ['Economics','Economic Principles & Behavior',['bias','behavioral','psychology','incentive','equilibrium','elasticity','opportunity cost','marginal','moral hazard','adverse selection','externality','game theory','nash','herding','anchoring','loss aversion','overconfidence','sunk cost','reflexivity','narrative','fallacy','supply and demand','comparative advantage']],
+ ['Finance','Hedge Funds & Private Markets',['hedge fund','private equity','venture capital','vc ','startup','portfolio company','secondaries','secondary market for','activist','long/short','merger arb','event-driven','global macro fund','quant fund','distressed','pod','multi-strategy','prime broker','sponsor','roll-up','platform','bolt-on','dry powder','capital call','vintage','unicorn','13f','crowded','endowment','illiquidity']],
+ ['Finance','Portfolio, Risk & Performance',['portfolio','sharpe','sortino','alpha','beta','benchmark','tracking error','drawdown','correlation','diversif','volatility','value at risk','var','risk-adjusted','irr','moic','dpi','tvpi','rebalanc','allocation','tail risk','efficient frontier','information ratio','kelly','compound']],
+ ['Economics','Macro, Rates & Policy',['fed','federal reserve','inflation','gdp','unemployment','central bank','monetary','fiscal','recession','cpi','pce','fomc','rate hike','rate cut','yield curve','quantitative','stimulus','deficit','labor market','payroll','economy-wide','dollar index','currency','exchange rate','carry trade','money supply','jobless','pmi','housing start','bank run','deposit']],
+ ['Economics','Economic Principles & Behavior',['bias','behavioral','psychology','incentive','equilibrium','elasticity','opportunity cost','marginal','moral hazard','adverse selection','externality','game theory','nash','herding','anchoring','loss aversion','overconfidence','sunk cost','reflexivity','narrative','fallacy','supply and demand','comparative advantage','network effect','economies of scale','goodhart','survivorship']],
+ ['Artificial Intelligence','Foundations & Learning',['machine learning','neural','gradient','backprop','loss function','overfit','generaliz','supervised','unsupervised','self-supervised','reinforcement learning','reward','embedding','vector','training data','corpus','label','feature','bias-variance','deep learning']],
+ ['Artificial Intelligence','Architectures & Training',['transformer','attention','token','context window','autoregress','next-token','temperature','sampling','pretrain','fine-tun','instruction tun','rlhf','scaling law','emergent','mixture of experts','moe','distill','quantiz','flops','gpu','parameter','weights','llm','language model']],
+ ['Artificial Intelligence','Deployment, Agents & Frontier',['inference','prompt','in-context','rag','retrieval','hallucinat','agent','multimodal','eval','benchmark','alignment','interpretab','open weights','open-source model','frontier','agi','jailbreak','red team','chatbot','api pricing','per token']],
 ];
 function classifyTerm(term,def){
   const text=(' '+term+' '+term+' '+def+' ').toLowerCase();
@@ -1487,7 +1720,7 @@ function openTermModal(id){
       if([...fGrp.options].some(o=>o.text===g)) fGrp.value=g;
       let hint=$('#autoSortHint');
       if(!hint){ hint=document.createElement('div'); hint.id='autoSortHint'; hint.style.cssText='font-size:12px;color:var(--faint);margin-top:6px'; fGrp.parentNode.appendChild(hint); }
-      hint.textContent='Auto-sorted \u2192 '+g+' (change if wrong)';
+      hint.textContent='Auto-sorted → '+g+' (change if wrong)';
     };
     $('#fTerm').addEventListener('blur',autoSort); $('#fDef').addEventListener('blur',autoSort);
   }
@@ -1527,7 +1760,6 @@ function closeModal(){ $('#modalRoot').innerHTML=''; }
 function wire(){
   // library
   $$('[data-scope]').forEach(b=>b.onclick=()=>{ state.scope=b.dataset.scope; state.query=''; $('#globalSearch').value=''; render(); });
-  const mt=$('#menuToggle'); if(mt)mt.onclick=()=>$('#indexPanel').classList.toggle('show');
   const at=$('#addTerm'); if(at)at.onclick=()=>openTermModal();
   $$('.term').forEach(card=>{
     card.onclick=e=>{ if(e.target.closest('[data-act]'))return; card.classList.toggle('open'); card.classList.toggle('collapsed'); };
@@ -1540,10 +1772,25 @@ function wire(){
   // study
   const ds=$('#deckScope'); if(ds)ds.onchange=()=>{ state.scope=ds.value; deck.cards=shuffle(scopeTerms(ds.value)); deck.i=0; deck.flipped=false; render(); };
   const rs=$('#reshuffle'); if(rs)rs.onclick=()=>{ deck.cards=shuffle(deck.cards); deck.i=0; deck.flipped=false; render(); };
-  const fl=$('#flash'); if(fl)fl.onclick=()=>{
-    if(state.view==='study'&&studyMode==='review'){ if(!rev.flipped){ rev.flipped=true; render(); } return; }
-    deck.flipped=!deck.flipped; fl.classList.toggle('flip');
-  };
+  const fl=$('#flash');
+  if(fl){
+    fl.onclick=()=>{
+      if(Date.now()-lastSwipe<450) return;
+      if(state.view==='study'&&studyMode==='review'){ if(!rev.flipped){ rev.flipped=true; render(); } return; }
+      deck.flipped=!deck.flipped; fl.classList.toggle('flip');
+    };
+    let sx=0,sy=0;
+    fl.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+    fl.addEventListener('touchend',e=>{
+      const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+      if(Math.abs(dx)>60&&Math.abs(dy)<50&&state.view==='study'&&studyMode==='browse'&&deck.cards.length){
+        lastSwipe=Date.now();
+        if(dx<0) deck.i=(deck.i+1)%deck.cards.length;
+        else deck.i=(deck.i-1+deck.cards.length)%deck.cards.length;
+        deck.flipped=false; render();
+      }
+    },{passive:true});
+  }
   const nc=$('#nextCard'); if(nc)nc.onclick=()=>{ deck.i=(deck.i+1)%deck.cards.length; deck.flipped=false; render(); };
   const pc=$('#prevCard'); if(pc)pc.onclick=()=>{ deck.i=(deck.i-1+deck.cards.length)%deck.cards.length; deck.flipped=false; render(); };
   $$('[data-smode]').forEach(b=>b.onclick=()=>{ studyMode=b.dataset.smode; if(studyMode==='review')rev.active=false; render(); });
@@ -1586,7 +1833,6 @@ function wire(){
   const ar=$('#addRes'); if(ar)ar.onclick=openResModal;
   $$('[data-resdel]').forEach(b=>b.onclick=()=>{ state.resources=state.resources.filter(r=>r.id!==b.dataset.resdel); Store.set('resources',state.resources); render(); toast('Removed'); });
 }
-function advanceDeck(){ if(deck.i+1<deck.cards.length){deck.i++;deck.flipped=false;render();} else {deck.cards=[];state.view='quiz';quiz=null;render();toast('Deck complete — quiz yourself?');} }
 
 function answerMC(k){
   const q=quiz.items[quiz.i]; if(quiz.answered)return;
@@ -1600,7 +1846,6 @@ function submitType(){
   const v=$('#typeAns').value.trim(); const q=quiz.items[quiz.i];
   quiz.typed=v; quiz.answered=true;
   const a=norm(v), b=norm(q.term);
-  // accept exact, contained, or parenthetical alias
   const alias=(q.term.match(/\(([^)]+)\)/)||[])[1];
   const auto = a&&(a===b || (a.length>3&&(b.includes(a)||a.includes(b))) || (alias&&norm(alias)===a));
   if(auto){ quiz.score++; mark(q.id,true); }
@@ -1609,7 +1854,6 @@ function submitType(){
 }
 function gradeType(right){
   const q=quiz.items[quiz.i];
-  // adjust if user overrides autograde
   if(right&&q.missed){ q.missed=false; quiz.score++; mark(q.id,true); }
   else if(!right&&!q.missed){ q.missed=true; quiz.score=Math.max(0,quiz.score-1); mark(q.id,false); }
   nextQ();
@@ -1625,7 +1869,7 @@ function renderCmpResults(qstr){
 }
 
 /* tabs + search */
-$$('#tabs button').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; if(state.view==='study')deck.cards=[]; if(state.view==='quiz')quiz=null; render(); });
+$$('#tabs button, #bottomnav button').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; if(state.view==='study')deck.cards=[]; if(state.view==='quiz')quiz=null; render(); window.scrollTo({top:0}); });
 $('#globalSearch').addEventListener('input',e=>{ state.query=e.target.value; if(state.view!=='library'){state.view='library';} state.scope='all'; render(); $('#globalSearch').focus(); const v=e.target.value; const inp=$('#globalSearch'); inp.value=v; inp.setSelectionRange(v.length,v.length); });
 
 init();
